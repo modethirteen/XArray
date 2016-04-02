@@ -1,5 +1,6 @@
-# XArray
-A utility for traversing PHP arrays with an XPath-like syntax
+XArray
+======
+A utility for traversing PHP arrays with an XPath-like syntax.
 
 [![travis-ci.org](https://travis-ci.org/MindTouch/XArray.php.svg?branch=master)](https://travis-ci.org/MindTouch/XArray.php)
 [![codecov.io](https://codecov.io/github/MindTouch/XArray.php/coverage.svg?branch=master)](https://codecov.io/github/MindTouch/XArray.php?branch=master)
