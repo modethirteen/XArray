@@ -1,4 +1,4 @@
-<phpunit bootstrap="_bootstrap.php" backupGlobals="false" processIsolation="false">
+<phpunit bootstrap="../_bootstrap.php" backupGlobals="false" processIsolation="false">
     <testsuite name="AllTests">
         <directory>tests</directory>
     </testsuite>
