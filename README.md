@@ -101,8 +101,8 @@ $X2->setVal('bar', 'foo');
 
 // get some values
 $result = $X2->getVal('foo/bar'); // qux
-$result = $X2->getAll('bar') // ['foo']
-$results = $X2->getAll('qux') // ['fred', 'quxx']
+$result = $X2->getAll('bar'); // ['foo']
+$results = $X2->getAll('qux'); // ['fred', 'quxx']
 
 // get the new array
 $array2 = $X2->toArray();
@@ -136,7 +136,7 @@ $X = new MutableXArray($array1);
 
 // set some values
 $X->setVal('foo/bar', 'qux');
-$X->setVal('fred', 'quxx')
+$X->setVal('fred', 'quxx');
 
 // get the new array
 $array2 = $X->toArray();
