@@ -1,5 +1,6 @@
 {
   "name": "mindtouch/xarray",
+  "description": "A utility for traversing PHP arrays with an XPath-like syntax",
   "type": "library",
   "license": "Apache-2.0",
   "authors" : [
