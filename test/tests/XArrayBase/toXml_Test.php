@@ -180,4 +180,22 @@ abstract class toXml_Test extends XArrayUnitTestCaseBase  {
         // assert
         $this->assertEquals('<p>val&quot;&amp;&#039;&lt;&gt;</p>', $xml, 'XML output was incorrect');
     }
+
+    /**
+     * @test
+     */
+    public function Can_handle_numeric_arrays() {
+    
+        // arrange
+        $source = ['foo' => [
+            'bar', 'baz', 'qux'    
+        ]];
+        $Array = $this->newXArray($source);
+        
+        // act
+        $xml = $Array->toXml();
+        
+        // assert
+        $this->assertEquals('<foo>bar</foo><foo>baz</foo><foo>qux</foo>', $xml, 'XML output was incorrect');
+    }
 }

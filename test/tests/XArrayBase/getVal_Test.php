@@ -45,6 +45,11 @@ abstract class getVal_Test extends XArrayUnitTestCaseBase  {
      */
     public static function dataProvider() {
         return [
+            'empty level zero' => [
+                [],
+                '',
+                []
+            ],
             'empty level one' => [
                 [],
                 'foo',
@@ -59,6 +64,11 @@ abstract class getVal_Test extends XArrayUnitTestCaseBase  {
                 ['foo' => ['bar' => '']],
                 'foo/bar/baz',
                 '',
+            ],
+            'string level zero' => [
+                ['foo' => 'bar'],
+                '',
+                ['foo' => 'bar']
             ],
             'string level one' => [
                 ['foo' => 'bar'],
@@ -77,6 +87,11 @@ abstract class getVal_Test extends XArrayUnitTestCaseBase  {
             ],
             
             // XArray::getVal(...) only gets first element of array value
+            'array level zero' => [
+                ['foo' => ['bar', 'baz']],
+                '',
+                ['foo' => ['bar', 'baz']],
+            ],
             'array level one' => [
                 ['foo' => ['bar', 'baz']],
                 'foo',

@@ -45,6 +45,11 @@ abstract class getAll_Test extends XArrayUnitTestCaseBase  {
      */
     public static function dataProvider() {
         return [
+            'empty level zero' => [
+                [],
+                '',
+                []
+            ],
             'empty level one' => [
                 [],
                 'foo',
@@ -60,6 +65,11 @@ abstract class getAll_Test extends XArrayUnitTestCaseBase  {
                 'foo/bar/baz',
                 [''],
             ],
+            'string level zero' => [
+                ['foo' => 'bar'],
+                '',
+                ['foo' => 'bar'],
+            ],
             'string level one' => [
                 ['foo' => 'bar'],
                 'foo',
@@ -74,6 +84,11 @@ abstract class getAll_Test extends XArrayUnitTestCaseBase  {
                 ['foo' => ['bar' => ['baz' => 'qux']]],
                 'foo/bar/baz',
                 ['qux'],
+            ],
+            'array level zero' => [
+                ['foo' => ['bar', 'baz']],
+                '',
+                ['foo' => ['bar', 'baz']],
             ],
             'array level one' => [
                 ['foo' => ['bar', 'baz']],

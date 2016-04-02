@@ -100,6 +100,24 @@ abstract class setVal_Test extends XArrayUnitTestCaseBase {
                 'qux',
                 ['foo' => ['bar' => ['baz' => 'qux']]]
             ],
+            'string with null level one' => [
+                ['foo' => 'bar'],
+                'foo',
+                null,
+                []
+            ],
+            'string with null level two' => [
+                ['foo' => ['bar' => 'baz']],
+                'foo/bar',
+                null,
+                ['foo' => []]
+            ],
+            'string with null level three' => [
+                ['foo' => ['bar' => ['baz' => 'fred']]],
+                'foo/bar/baz',
+                null,
+                ['foo' => ['bar' => []]]
+            ],
             'string with array level one' => [
                 ['foo' => 'bar'],
                 'foo',
@@ -135,6 +153,24 @@ abstract class setVal_Test extends XArrayUnitTestCaseBase {
                 'foo/bar/baz',
                 'quxx',
                 ['foo' => ['bar' => ['baz' => 'quxx']]]
+            ],
+            'array with null level one' => [
+                ['foo' => ['baz', 'qux']],
+                'foo',
+                null,
+                []
+            ],
+            'array with null level two' => [
+                ['foo' => ['bar' => ['baz', 'qux']]],
+                'foo/bar',
+                null,
+                ['foo' => []]
+            ],
+            'array with null level three' => [
+                ['foo' => ['bar' => ['baz' => ['fred', 'qux']]]],
+                'foo/bar/baz',
+                null,
+                ['foo' => ['bar' => []]]
             ],
             'array with array level one' => [
                 ['foo' => ['fred', 'quxx']],
