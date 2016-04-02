@@ -21,10 +21,7 @@
     "phpunit/phpunit": "~4.8.23"
   },
   "autoload": {
-    "psr-0": { "MindTouch\\XArray\\": "" },
-    "classmap": [
-      "src/"
-    ]
+    "psr-4": { "MindTouch\\XArray\\": "src/" }
   },
   "target-dir": "MindTouch/XArray"
 }
