@@ -17,7 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-require_once(dirname(__FILE__) . '/vendor/autoload.php');
+require_once(dirname(__FILE__) . '/../vendor/autoload.php');
 spl_autoload_register(function($class) {
     $prefix = 'MindTouch\\XArray\\';
     $length = strlen($prefix);
@@ -26,7 +26,7 @@ spl_autoload_register(function($class) {
     }
     $relativeClass = substr($class, $length);
     $segments = explode('\\', $relativeClass);
-    $path = dirname(__FILE__) . '/src/' . implode('/', $segments) . '.php';
+    $path = dirname(__FILE__) . '/../src/' . implode('/', $segments) . '.php';
     if(file_exists($path)) {
 
         /** @noinspection PhpIncludeInspection */
