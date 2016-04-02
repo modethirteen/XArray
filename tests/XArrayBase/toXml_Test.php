@@ -17,7 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MindTouch\XArray\test\tests\XArrayBase;
+namespace MindTouch\XArray\tests\XArrayBase;
 
 abstract class toXml_Test extends XArrayUnitTestCaseBase  {
 

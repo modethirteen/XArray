@@ -17,12 +17,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MindTouch\XArray\test\tests\XArray;
+namespace MindTouch\XArray\tests\MutableXArray;
 
-class toXml_Test extends \MindTouch\XArray\test\tests\XArrayBase\toXml_Test  {
+use MindTouch\XArray\MutableXArray;
+use PHPUnit_Framework_TestCase;
+
+class __ctor_Test extends PHPUnit_Framework_TestCase {
 
     /**
-     * @var string
+     * @test
      */
-    protected static $class = 'MindTouch\XArray\XArray';
+    public function Constructor_holds_reference_to_source_array() {
+        
+        // arrange
+        $source = ['foo' => 'bar'];
+        
+        // act
+        $Array = new MutableXArray($source);
+        $Array->setVal('foo', 'baz');
+        
+        // assert
+        $this->assertSame($source, $Array->toArray());
+    }
 }

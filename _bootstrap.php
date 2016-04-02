@@ -18,18 +18,3 @@
  * limitations under the License.
  */
 require_once(dirname(__FILE__) . '/vendor/autoload.php');
-spl_autoload_register(function($class) {
-    $prefix = 'MindTouch\\XArray\\';
-    $length = strlen($prefix);
-    if(strncmp($prefix, $class, $length) !== 0) {
-        return;
-    }
-    $relativeClass = substr($class, $length);
-    $segments = explode('\\', $relativeClass);
-    $path = dirname(__FILE__) . '/src/' . implode('/', $segments) . '.php';
-    if(file_exists($path)) {
-
-        /** @noinspection PhpIncludeInspection */
-        include_once($path);
-    }
-});

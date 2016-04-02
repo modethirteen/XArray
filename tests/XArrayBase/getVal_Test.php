@@ -17,9 +17,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MindTouch\XArray\test\tests\XArrayBase;
+namespace MindTouch\XArray\tests\XArrayBase;
 
-abstract class getAll_Test extends XArrayUnitTestCaseBase  {
+abstract class getVal_Test extends XArrayUnitTestCaseBase  {
 
     /**
      * @test
@@ -28,13 +28,13 @@ abstract class getAll_Test extends XArrayUnitTestCaseBase  {
      * @param string $xpath
      * @param array $expected
      */
-    public function Can_get_all_values(array $source, $xpath, $expected) {
-        
+    public function Can_get_value(array $source, $xpath, $expected) {
+
         // arrange
         $Array = $this->newXArray($source);
 
         // act
-        $result = $Array->getAll($xpath);
+        $result = $Array->getVal($xpath);
 
         // assert
         $this->assertEquals($expected, $result);
@@ -53,38 +53,40 @@ abstract class getAll_Test extends XArrayUnitTestCaseBase  {
             'empty level one' => [
                 [],
                 'foo',
-                [],
+                '',
             ],
             'empty level two' => [
                 ['foo' => ''],
                 'foo/bar',
-                [''],
+                '',
             ],
             'empty level three' => [
                 ['foo' => ['bar' => '']],
                 'foo/bar/baz',
-                [''],
+                '',
             ],
             'string level zero' => [
                 ['foo' => 'bar'],
                 '',
-                ['foo' => 'bar'],
+                ['foo' => 'bar']
             ],
             'string level one' => [
                 ['foo' => 'bar'],
                 'foo',
-                ['bar'],
+                'bar',
             ],
             'string level two' => [
                 ['foo' => ['bar' => 'baz']],
                 'foo/bar',
-                ['baz'],
+                'baz',
             ],
             'string level three' => [
                 ['foo' => ['bar' => ['baz' => 'qux']]],
                 'foo/bar/baz',
-                ['qux'],
+                'qux',
             ],
+            
+            // XArray::getVal(...) only gets first element of array value
             'array level zero' => [
                 ['foo' => ['bar', 'baz']],
                 '',
@@ -93,17 +95,17 @@ abstract class getAll_Test extends XArrayUnitTestCaseBase  {
             'array level one' => [
                 ['foo' => ['bar', 'baz']],
                 'foo',
-                ['bar', 'baz'],
+                'bar',
             ],
             'array level two' => [
                 ['foo' => ['bar' => ['baz', 'qux']]],
                 'foo/bar',
-                ['baz', 'qux']
+                'baz'
             ],
             'array level three' => [
                 ['foo' => ['bar' => ['baz' => ['qux', 'fred']]]],
                 'foo/bar/baz',
-                ['qux', 'fred']
+                'qux'
             ]
         ];
     }

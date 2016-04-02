@@ -17,24 +17,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MindTouch\XArray\test\tests\XArrayBase;
+namespace MindTouch\XArray\tests\MutableXArray;
 
-use MindTouch\XArray\XArray;
-use PHPUnit_Framework_TestCase;
-
-abstract class XArrayUnitTestCaseBase extends PHPUnit_Framework_TestCase  {
+class toXml_Test extends \MindTouch\XArray\tests\XArrayBase\toXml_Test  {
 
     /**
      * @var string
      */
-    protected static $class;
-
-    /**
-     * @param array|null $array
-     * @return XArray
-     */
-    protected function newXArray(array $array = []) {
-        $class = static::$class;
-        return new $class($array);
-    }
+    protected static $class = 'MindTouch\XArray\MutableXArray';
 }

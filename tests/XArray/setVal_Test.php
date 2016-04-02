@@ -17,12 +17,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MindTouch\XArray\test\tests\MutableXArray;
+namespace MindTouch\XArray\tests\XArray;
 
-class getVal_Test extends \MindTouch\XArray\test\tests\XArrayBase\getVal_Test  {
+use MindTouch\XArray\XArray;
+
+class setVal_Test extends \MindTouch\XArray\tests\XArrayBase\setVal_Test  {
 
     /**
      * @var string
      */
-    protected static $class = 'MindTouch\XArray\MutableXArray';
+    protected static $class = 'MindTouch\XArray\XArray';
+
+    /**
+     * @test
+     */
+    public function Cannot_mutate_original_array() {
+        
+        // arrange
+        $array = ['foo' => ['bar' => 'baz']];
+        $X = new XArray($array);
+        
+        // act
+        $X->setVal('qux', 'fred');
+        
+        // assert
+        $this->assertEquals(['foo' => ['bar' => 'baz']], $array);
+    }
 }

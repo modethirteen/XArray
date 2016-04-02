@@ -17,9 +17,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MindTouch\XArray\test\tests\XArray;
+namespace MindTouch\XArray\tests\XArray;
 
-class toArray_Test extends \MindTouch\XArray\test\tests\XArrayBase\toArray_Test  {
+class toXml_Test extends \MindTouch\XArray\tests\XArrayBase\toXml_Test  {
 
     /**
      * @var string

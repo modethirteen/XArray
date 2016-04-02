@@ -10,7 +10,6 @@
       "role": "Maintainer"
     }
   ],
-  "minimum-stability": "dev",
   "support": {
     "issues": "https://github.com/MindTouch/XArray.php/issues"
   },
@@ -21,7 +20,9 @@
     "phpunit/phpunit": "~4.8.23"
   },
   "autoload": {
-    "psr-4": { "MindTouch\\XArray\\": "src/" }
+    "psr-4": { "MindTouch\\XArray\\": ["src/"] }
   },
-  "target-dir": "MindTouch/XArray"
+  "autoload-dev": {
+    "psr-4": { "MindTouch\\XArray\\tests\\": ["tests/"] }
+  }
 }

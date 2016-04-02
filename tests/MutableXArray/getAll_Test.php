@@ -17,12 +17,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MindTouch\XArray\test\tests\XArray;
+namespace MindTouch\XArray\tests\MutableXArray;
 
-class getAll_Test extends \MindTouch\XArray\test\tests\XArrayBase\getAll_Test  {
+class getAll_Test extends \MindTouch\XArray\tests\XArrayBase\getAll_Test  {
 
     /**
      * @var string
      */
-    protected static $class = 'MindTouch\XArray\XArray';
+    protected static $class = 'MindTouch\XArray\MutableXArray';
 }
