@@ -17,10 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-$composerAutoloadPath = dirname(__FILE__) . '/vendor/autoload.php';
-if(file_exists($composerAutoloadPath)) {
-    include_once($composerAutoloadPath);
-}
+require_once(dirname(__FILE__) . '/vendor/autoload.php');
 spl_autoload_register(function($class) {
     $prefix = 'MindTouch\\XArray\\';
     $length = strlen($prefix);
