@@ -91,8 +91,6 @@ $result = $X1->getVal('foo/bar'); // baz
 $result = $X1->getVal('qux'); // fred
 $results = $X1->getAll('qux'); // ['fred', 'quxx']
 
-// NOTE: getVal
-
 // get the array
 $array1 = $X1->toArray();
 
