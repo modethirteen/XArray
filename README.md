@@ -4,6 +4,7 @@ A utility for traversing PHP arrays with an XPath-like syntax.
 [![travis-ci.org](https://travis-ci.org/MindTouch/XArray.php.svg?branch=master)](https://travis-ci.org/MindTouch/XArray.php)
 [![codecov.io](https://codecov.io/github/MindTouch/XArray.php/coverage.svg?branch=master)](https://codecov.io/github/MindTouch/XArray.php?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/mindtouch/xarray/version.svg)](https://packagist.org/packages/mindtouch/xarray)
+[![Latest Unstable Version](https://poser.pugx.org/mindtouch/xarray/v/unstable)](https://packagist.org/packages/mindtouch/xarray)
 
 ## Requirements
 * PHP 5.4, 5.5, 5.6 (0.1.x)
@@ -41,8 +42,8 @@ $x1->setVal('foo/bar', 'baz');
 $x1->setVal('qux', ['fred', 'quxx']);
 
 // get some values
-$result = $x1->getVal('foo/bar'); // baz
-$result = $x1->getVal('qux'); // fred
+$result = $x1->getVal('foo/bar'); // 'baz'
+$result = $x1->getVal('qux'); // 'fred'
 $results = $x1->getAll('qux'); // ['fred', 'quxx']
 
 // get the array
@@ -56,19 +57,25 @@ $x2->setVal('foo/bar', ['qux', 'baz']);
 $x2->setVal('bar', 'foo');
 
 // get some values
-$result = $x2->getVal('foo/bar'); // qux
+$result = $x2->getVal('foo/bar'); // 'qux'
 $result = $x2->getAll('bar'); // ['foo']
 $results = $x2->getAll('qux'); // ['fred', 'quxx']
 
-// get a value strictly as a string
+// we can get a value strictly as a string, if we are in strict typing mode!
+// first we set some non-string values...
 $x2->setVal('qwerty', true);
 $x2->setVal('asdf', new class {
     public function __toString() {
         return 'zxcv';
     }
 });
+
+// ...and cast them to string!
 $result = $x2->getString('qwerty'); // 'true'
 $result = $x2->getString('asdf'); // 'zxcv'
+
+// of course, string values themselves can be fetched as strict string types
+$result = $x2->getString('foo/bar'); // 'qux'
 
 // get the new array
 $array2 = $x2->toArray();
