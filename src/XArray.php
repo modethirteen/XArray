@@ -19,8 +19,6 @@
  */
 namespace MindTouch\XArray;
 
-use Closure;
-
 /**
  * Class XArray - get/set accessors for arrays
  *
@@ -124,12 +122,11 @@ class XArray {
      * @param string $key - the array path to return, i.e. /pages/content
      * @param mixed $default - if the key is not found, this value will be returned
      * @return mixed|null
-     * @throws EmptyKeyNotAllowedException
      */
     public function getVal(string $key, $default = null) {
         $array = $this->array;
         if($key === '') {
-            throw new EmptyKeyNotAllowedException();
+            return null;
         }
         $keys = explode('/', $key);
         $count = count($keys);
@@ -164,7 +161,6 @@ class XArray {
      * @param string $key - the array path to return, i.e. /pages/content
      * @param string $default - if the key is not found, this string value will be returned
      * @return string - string representation of value
-     * @throws EmptyKeyNotAllowedException
      */
     public function getString(string $key, string $default = '') : string {
         return self::getStringValue($this->getVal($key, $default));

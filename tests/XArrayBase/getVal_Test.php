@@ -19,8 +19,6 @@
  */
 namespace MindTouch\XArray\tests\XArrayBase;
 
-use MindTouch\XArray\EmptyKeyNotAllowedException;
-
 abstract class getVal_Test extends XArrayUnitTestCaseBase  {
 
     /**
@@ -29,7 +27,6 @@ abstract class getVal_Test extends XArrayUnitTestCaseBase  {
      * @param array $source
      * @param string $xpath
      * @param mixed $expected
-     * @throws EmptyKeyNotAllowedException
      */
     public function Can_get_value(array $source, string $xpath, $expected) {
 
@@ -45,7 +42,6 @@ abstract class getVal_Test extends XArrayUnitTestCaseBase  {
 
     /**
      * @test
-     * @throws EmptyKeyNotAllowedException
      */
     public function Can_get_default() {
 
@@ -60,16 +56,18 @@ abstract class getVal_Test extends XArrayUnitTestCaseBase  {
     }
 
     /**
-     * @expectedException \MindTouch\XArray\EmptyKeyNotAllowedException
      * @test
      */
-    public function Cannot_lookup_empty_key() {
+    public function Empty_key_returns_null() {
 
         // arrange
         $x = $this->newXArray(['foo' => 'bar']);
 
         // act
-        $x->getVal('');
+        $result = $x->getVal('');
+
+        // assert
+        $this->assertNull($result);
     }
     
     /**
