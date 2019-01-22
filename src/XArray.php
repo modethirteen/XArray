@@ -126,7 +126,7 @@ class XArray {
     public function getVal(string $key, $default = null) {
         $array = $this->array;
         if($key === '') {
-            return null;
+            return $default;
         }
         $keys = explode('/', $key);
         $count = count($keys);
