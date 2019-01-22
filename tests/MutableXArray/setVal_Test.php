@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * MindTouch XArray
  *
@@ -26,7 +26,7 @@ class setVal_Test extends \MindTouch\XArray\tests\XArrayBase\setVal_Test  {
     /**
      * @var string
      */
-    protected static $class = 'MindTouch\XArray\MutableXArray';
+    protected static $class = MutableXArray::class;
 
     /**
      * @test

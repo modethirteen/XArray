@@ -20,23 +20,11 @@
 namespace MindTouch\XArray\tests\XArray;
 
 use MindTouch\XArray\XArray;
-use PHPUnit\Framework\TestCase;
 
-class __ctor_Test extends TestCase {
+class getString_Test extends \MindTouch\XArray\tests\XArrayBase\getString_Test  {
 
     /**
-     * @test
+     * @var string
      */
-    public function Constructor_does_not_hold_reference_to_source_array() {
-        
-        // arrange
-        $source = ['foo' => 'bar'];
-        
-        // act
-        $x = new XArray($source);
-        $x->setVal('foo', 'baz');
-        
-        // assert
-        $this->assertNotSame($source, $x->toArray());
-    }
+    protected static $class = XArray::class;
 }

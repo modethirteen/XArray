@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * MindTouch XArray
  *
@@ -19,19 +19,35 @@
  */
 namespace MindTouch\XArray;
 
+use Closure;
+
 /**
  * Class XArray - get/set accessors for arrays
- * 
+ *
  * @package MindTouch\XArray
  */
 class XArray {
 
     /**
+     * Get string representation of value
+     *
+     * @param mixed $value
+     * @return string
+     */
+    private static function getStringValue($value) : string {
+        if(is_bool($value)) {
+            return $value === true ? 'true' : 'false';
+        }
+        return !is_string($value) ? strval($value) : $value;
+    }
+
+    /**
      * @param array $array
      * @param string $key
-     * @param string|array $value
+     * @param mixed $value
+     * @return void
      */
-    private static function setValHelper(&$array, $key, $value) {
+    private static function setValHelper(array &$array, string $key, $value) : void {
         $keys = explode('/', $key);
         $count = count($keys);
         $i = 0;
@@ -61,54 +77,7 @@ class XArray {
     /**
      * @param array $array - array values to create XArray from. If not supplied, XArray will start empty
      */
-    public function __construct(array $array = null) { $this->array = ($array !== null) ? $array : []; }
-
-    /**
-     * Set or replace a key value.
-     * 
-     * @param string $key
-     * @param string|array $value
-     */
-    public function setVal($key, $value = null) { $this->setValHelper($this->array, $key, $value); }
-
-    /**
-     * Find $key in the XArray, which is delimited by /
-     * If the found value is itself an array of multiple values, it will return the value of key '0'.
-     *
-     * @param string $key - the array path to return, i.e. /pages/content
-     * @param mixed $default - if the key is not found, this value will be returned
-     * @return mixed|null
-     */
-    public function getVal($key = '', $default = null) {
-        $array = $this->array;
-        if($key == '') {
-            return $array;
-        }
-        $keys = explode('/', $key);
-        $count = count($keys);
-        $i = 0;
-        foreach($keys as $k => $val) {
-            $i++;
-            if($val == '') {
-                continue;
-            }
-            if(isset($array[$val]) && !is_array($array[$val])) {
-                if($array[$val] !== null && $i == $count) {
-                    return $array[$val];
-                }
-                return $default;
-            }
-            if(isset($array[$val])) {
-                $array = $array[$val];
-            } else {
-                return $default;
-            }
-            if(is_array($array) && key($array) == '0') {
-                $array = current($array);
-            }
-        }
-        return $array;
-    }
+    public function __construct(array $array = null) { $this->array = $array !== null ? $array : []; }
 
     /**
      * Find $key in the XArray, which is delimited by /
@@ -116,12 +85,12 @@ class XArray {
      * If the found value is a single value, it is wrapped in an array then returned.
      *
      * @param string $key - the array path to return, i.e. /pages/content
-     * @param mixed $default - if the key is not found, this value will be returned
-     * @return array|mixed|null
+     * @param array $default - if the key is not found, this array will be returned
+     * @return array|null
      */
-    public function getAll($key = '', $default = []) {
+    public function getAll(string $key = '', array $default = []) : ?array {
         $array = $this->array;
-        if($key == '') {
+        if($key === '') {
             return $array;
         }
         $keys = explode('/', $key);
@@ -129,7 +98,7 @@ class XArray {
         $i = 0;
         foreach($keys as $val) {
             $i++;
-            if($val == '') {
+            if($val === '') {
                 continue;
             }
             if(!isset($array[$val])) {
@@ -140,7 +109,7 @@ class XArray {
             }
             $array = $array[$val];
             if($i == $count) {
-                if(key($array) != '0') {
+                if(key($array) !== 0) {
                     $array = [$array];
                 }
             }
@@ -149,15 +118,78 @@ class XArray {
     }
 
     /**
+     * Find $key in the XArray, which is delimited by /
+     * If the found value is itself an array of multiple values, it will return the value of array key 0.
+     *
+     * @param string $key - the array path to return, i.e. /pages/content
+     * @param mixed $default - if the key is not found, this value will be returned
+     * @return mixed|null
+     * @throws EmptyKeyNotAllowedException
+     */
+    public function getVal(string $key, $default = null) {
+        $array = $this->array;
+        if($key === '') {
+            throw new EmptyKeyNotAllowedException();
+        }
+        $keys = explode('/', $key);
+        $count = count($keys);
+        $i = 0;
+        foreach($keys as $k => $val) {
+            $i++;
+            if($val === '') {
+                continue;
+            }
+            if(isset($array[$val]) && !is_array($array[$val])) {
+                if($array[$val] !== null && $i === $count) {
+                    return $array[$val];
+                }
+                return $default;
+            }
+            if(isset($array[$val])) {
+                $array = $array[$val];
+            } else {
+                return $default;
+            }
+            if(is_array($array) && key($array) === 0) {
+                $array = current($array);
+            }
+        }
+        return $array;
+    }
+
+    /**
+     * Find $key in the XArray, which is delimited by /
+     * If the found value is itself an array of multiple values, it will return the value of array key 0
+     *
+     * @param string $key - the array path to return, i.e. /pages/content
+     * @param string $default - if the key is not found, this string value will be returned
+     * @return string - string representation of value
+     * @throws EmptyKeyNotAllowedException
+     */
+    public function getString(string $key, string $default = '') : string {
+        return self::getStringValue($this->getVal($key, $default));
+    }
+
+    /**
+     * Set or replace a key value.
+     *
+     * @param string $key
+     * @param mixed $value
+     * @return void
+     */
+    public function setVal(string $key, $value = null) : void { $this->setValHelper($this->array, $key, $value); }
+
+    /**
      * Return the array as an XML string
      *
      * @param string $outer - optional output tag, used for recursion
-     * @return string - xml representation of the array
+     * @return string - xml string representation of the array
      */
-    public function toXml($outer = null) {
+    public function toXml(string $outer = null) : string {
         $result = '';
         foreach($this->array as $key => $value) {
-            if(strncmp($key, '@', 1) == 0) {
+            $key = self::getStringValue($key);
+            if(strncmp($key, '@', 1) === 0) {
 
                 // skip attributes
             } else {
@@ -165,24 +197,27 @@ class XArray {
                 if(is_array($value) && (count($value) > 0) && isset($value[0])) {
 
                     // numeric array found => child nodes
-                    $XArray = new XArray($value);
-                    $result .= $XArray->toXml($key);
-                    unset($XArray);
+                    $x = new XArray($value);
+                    $result .= $x->toXml($key);
+                    unset($x);
                 } else {
                     if(is_array($value)) {
 
                         // attribute list found
                         $attrs = '';
-                        foreach($value as $attr_key => $attr_value) {
-                            if(strncmp($attr_key, '@', 1) == 0) {
-                                $attrs .= ' ' . htmlspecialchars(substr($attr_key, 1), ENT_QUOTES) . '="' . htmlspecialchars($attr_value, ENT_QUOTES) . '"';
+                        foreach($value as $attrKey => $attrValue) {
+                            $attrKey = self::getStringValue($attrKey);
+                            if(strncmp($attrKey, '@', 1) === 0) {
+                                $attrValue = self::getStringValue($attrValue);
+                                $attrs .= ' ' . htmlspecialchars(substr($attrKey, 1), ENT_QUOTES) . '="' . htmlspecialchars($attrValue, ENT_QUOTES) . '"';
                             }
                         }
-                        $XArray = new XArray($value);
-                        $result .= '<' . $encodedTag . $attrs . '>' . $XArray->toXml() . '</' . $encodedTag . '>';
-                        unset($XArray);
+                        $x = new XArray($value);
+                        $result .= '<' . $encodedTag . $attrs . '>' . $x->toXml() . '</' . $encodedTag . '>';
+                        unset($x);
                     } else {
-                        if($encodedTag != '#text') {
+                        $value = self::getStringValue($value);
+                        if($encodedTag !== '#text') {
                             $result .= '<' . $encodedTag . '>' . htmlspecialchars($value, ENT_QUOTES) . '</' . $encodedTag . '>';
                         } else {
                             $result .= htmlspecialchars($value, ENT_QUOTES);
@@ -199,5 +234,5 @@ class XArray {
      *
      * @return array
      */
-    public function toArray() { return $this->array; }
+    public function toArray() : array { return $this->array; }
 }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * MindTouch XArray
  *
@@ -23,28 +23,28 @@ abstract class setVal_Test extends XArrayUnitTestCaseBase {
 
     /**
      * @test
-     * @dataProvider dataProvider
+     * @dataProvider source_xpath_value_expected_Provider
      * @param array $source
      * @param string $xpath
-     * @param string|array $value
+     * @param mixed $value
      * @param array $expected
      */
-    public function Can_set_value(array $source, $xpath, $value, $expected) {
+    public function Can_set_value(array $source, string $xpath, $value, array $expected) {
 
         // arrange
-        $Array = $this->newXArray($source);
+        $x = $this->newXArray($source);
 
         // act
-        $Array->setVal($xpath, $value);
+        $x->setVal($xpath, $value);
 
         // assert
-        $this->assertEquals($expected, $Array->toArray());
+        $this->assertEquals($expected, $x->toArray());
     }
 
     /**
      * @return array
      */
-    public static function dataProvider() {
+    public static function source_xpath_value_expected_Provider() : array {
         return [
             'empty with string level one' => [
                 [],

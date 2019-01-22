@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * MindTouch XArray
  *
@@ -28,10 +28,10 @@ abstract class toXml_Test extends XArrayUnitTestCaseBase  {
 
         // arrange
         $source = ['p' => ['@attr1' => 'val1', '@attr2' => 'val2', '#text' => 'text']];
-        $Array = $this->newXArray($source);
+        $x = $this->newXArray($source);
 
         // act
-        $xml = $Array->toXml();
+        $xml = $x->toXml();
 
         // assert
         $this->assertEquals('<p attr1="val1" attr2="val2">text</p>', $xml, 'XML output was incorrect');
@@ -55,10 +55,10 @@ abstract class toXml_Test extends XArrayUnitTestCaseBase  {
                 ]
             ]
         ];
-        $Array = $this->newXArray($source);
+        $x = $this->newXArray($source);
 
         // act
-        $xml = $Array->toXml();
+        $xml = $x->toXml();
 
         // assert
         $this->assertEquals('<div attr1="val1" attr2="val2">text<p attr4="val4" attr5="val5">text2</p></div>', $xml, 'XML output was incorrect');
@@ -82,10 +82,10 @@ abstract class toXml_Test extends XArrayUnitTestCaseBase  {
                 ]
             ]
         ];
-        $Array = $this->newXArray($source);
+        $x = $this->newXArray($source);
 
         // act
-        $xml = $Array->toXml('mindtouch');
+        $xml = $x->toXml('mindtouch');
 
         // assert
         $this->assertEquals('<mindtouch attr1="val1" attr2="val2">text<p attr4="val4" attr5="val5">text2</p></mindtouch>', $xml, 'XML output was incorrect');
@@ -100,10 +100,10 @@ abstract class toXml_Test extends XArrayUnitTestCaseBase  {
 
         // arrange
         $source = ['p' => ['@attr1"&\'<>' => 'val1', '#text' => 'text']];
-        $Array = $this->newXArray($source);
+        $x = $this->newXArray($source);
 
         // act
-        $xml = $Array->toXml();
+        $xml = $x->toXml();
 
         // assert
         $this->assertEquals('<p attr1&quot;&amp;&#039;&lt;&gt;="val1">text</p>', $xml, 'XML output was incorrect');
@@ -118,10 +118,10 @@ abstract class toXml_Test extends XArrayUnitTestCaseBase  {
 
         // arrange
         $source = ['p' => ['@attr1' => 'val1"&\'<>', '#text' => 'text']];
-        $Array = $this->newXArray($source);
+        $x = $this->newXArray($source);
 
         // act
-        $xml = $Array->toXml();
+        $xml = $x->toXml();
 
         // assert
         $this->assertEquals('<p attr1="val1&quot;&amp;&#039;&lt;&gt;">text</p>', $xml, 'XML output was incorrect');
@@ -136,10 +136,10 @@ abstract class toXml_Test extends XArrayUnitTestCaseBase  {
 
         // arrange
         $source = ['p' => ['#text' => 'text"&\'<>']];
-        $Array = $this->newXArray($source);
+        $x = $this->newXArray($source);
 
         // act
-        $xml = $Array->toXml();
+        $xml = $x->toXml();
 
         // assert
         $this->assertEquals('<p>text&quot;&amp;&#039;&lt;&gt;</p>', $xml, 'XML output was incorrect');
@@ -154,10 +154,10 @@ abstract class toXml_Test extends XArrayUnitTestCaseBase  {
 
         // arrange
         $source = ['p"&\'<>' => ['#text' => 'text']];
-        $Array = $this->newXArray($source);
+        $x = $this->newXArray($source);
 
         // act
-        $xml = $Array->toXml();
+        $xml = $x->toXml();
 
         // assert
         $this->assertEquals('<p&quot;&amp;&#039;&lt;&gt;>text</p&quot;&amp;&#039;&lt;&gt;>', $xml, 'XML output was incorrect');
@@ -172,10 +172,10 @@ abstract class toXml_Test extends XArrayUnitTestCaseBase  {
 
         // arrange
         $source = ['p' => 'val"&\'<>'];
-        $Array = $this->newXArray($source);
+        $x = $this->newXArray($source);
 
         // act
-        $xml = $Array->toXml();
+        $xml = $x->toXml();
 
         // assert
         $this->assertEquals('<p>val&quot;&amp;&#039;&lt;&gt;</p>', $xml, 'XML output was incorrect');
@@ -190,12 +190,46 @@ abstract class toXml_Test extends XArrayUnitTestCaseBase  {
         $source = ['foo' => [
             'bar', 'baz', 'qux'    
         ]];
-        $Array = $this->newXArray($source);
+        $x = $this->newXArray($source);
         
         // act
-        $xml = $Array->toXml();
+        $xml = $x->toXml();
         
         // assert
         $this->assertEquals('<foo>bar</foo><foo>baz</foo><foo>qux</foo>', $xml, 'XML output was incorrect');
+    }
+
+    /**
+     * @test
+     */
+    public function Can_handle_non_string_types() {
+
+          // arrange
+        $source = [
+            'div' => [
+                '@attr1' => true,
+                '@attr2' => 123,
+                '#text' => 'text',
+                'p' => [
+                    '@attr4' => 1.45,
+                    '@attr5' => new class {
+                        public function __toString() {
+                            return 'zxcv';
+                        }
+                    },
+                    '#text' => 'text2'
+                ],
+                541 => [
+                    '#text' => 'foo'
+                ]
+            ]
+        ];
+        $x = $this->newXArray($source);
+
+        // act
+        $xml = $x->toXml();
+
+        // assert
+        $this->assertEquals('<div attr1="true" attr2="123">text<p attr4="1.45" attr5="zxcv">text2</p><541>foo</541></div>', $xml, 'XML output was incorrect');
     }
 }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * MindTouch XArray
  *
@@ -20,9 +20,9 @@
 namespace MindTouch\XArray\tests\XArrayBase;
 
 use MindTouch\XArray\XArray;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-abstract class XArrayUnitTestCaseBase extends PHPUnit_Framework_TestCase  {
+abstract class XArrayUnitTestCaseBase extends TestCase  {
 
     /**
      * @var string
@@ -33,7 +33,7 @@ abstract class XArrayUnitTestCaseBase extends PHPUnit_Framework_TestCase  {
      * @param array|null $array
      * @return XArray
      */
-    protected function newXArray(array $array = []) {
+    protected function newXArray(array $array = []) : XArray {
         $class = static::$class;
         return new $class($array);
     }

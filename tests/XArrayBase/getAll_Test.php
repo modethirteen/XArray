@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * MindTouch XArray
  *
@@ -23,18 +23,18 @@ abstract class getAll_Test extends XArrayUnitTestCaseBase  {
 
     /**
      * @test
-     * @dataProvider dataProvider
+     * @dataProvider source_xpath_expected_Provider
      * @param array $source
      * @param string $xpath
      * @param array $expected
      */
-    public function Can_get_all_values(array $source, $xpath, $expected) {
+    public function Can_get_all_values(array $source, string $xpath, array $expected) {
         
         // arrange
-        $Array = $this->newXArray($source);
+        $x = $this->newXArray($source);
 
         // act
-        $result = $Array->getAll($xpath);
+        $result = $x->getAll($xpath);
 
         // assert
         $this->assertEquals($expected, $result);
@@ -43,7 +43,7 @@ abstract class getAll_Test extends XArrayUnitTestCaseBase  {
     /**
      * @return array
      */
-    public static function dataProvider() {
+    public static function source_xpath_expected_Provider() : array {
         return [
             'empty level zero' => [
                 [],

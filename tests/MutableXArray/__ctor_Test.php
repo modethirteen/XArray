@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * MindTouch XArray
  *
@@ -20,9 +20,9 @@
 namespace MindTouch\XArray\tests\MutableXArray;
 
 use MindTouch\XArray\MutableXArray;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class __ctor_Test extends PHPUnit_Framework_TestCase {
+class __ctor_Test extends TestCase {
 
     /**
      * @test
@@ -33,10 +33,10 @@ class __ctor_Test extends PHPUnit_Framework_TestCase {
         $source = ['foo' => 'bar'];
         
         // act
-        $Array = new MutableXArray($source);
-        $Array->setVal('foo', 'baz');
+        $x = new MutableXArray($source);
+        $x->setVal('foo', 'baz');
         
         // assert
-        $this->assertSame($source, $Array->toArray());
+        $this->assertSame($source, $x->toArray());
     }
 }

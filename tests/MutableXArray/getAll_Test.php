@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * MindTouch XArray
  *
@@ -19,10 +19,12 @@
  */
 namespace MindTouch\XArray\tests\MutableXArray;
 
+use MindTouch\XArray\MutableXArray;
+
 class getAll_Test extends \MindTouch\XArray\tests\XArrayBase\getAll_Test  {
 
     /**
      * @var string
      */
-    protected static $class = 'MindTouch\XArray\MutableXArray';
+    protected static $class = MutableXArray::class;
 }

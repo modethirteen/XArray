@@ -20,24 +20,25 @@
 namespace MindTouch\XArray\tests\XArrayBase;
 
 use MindTouch\XArray\EmptyKeyNotAllowedException;
+use stdClass;
 
-abstract class getVal_Test extends XArrayUnitTestCaseBase  {
+abstract class getString_Test extends XArrayUnitTestCaseBase  {
 
     /**
      * @test
      * @dataProvider source_xpath_expected_Provider
      * @param array $source
      * @param string $xpath
-     * @param mixed $expected
+     * @param string $expected
      * @throws EmptyKeyNotAllowedException
      */
-    public function Can_get_value(array $source, string $xpath, $expected) {
+    public function Can_get_string_value(array $source, string $xpath, $expected) {
 
         // arrange
         $x = $this->newXArray($source);
 
         // act
-        $result = $x->getVal($xpath);
+        $result = $x->getString($xpath);
 
         // assert
         $this->assertEquals($expected, $result);
@@ -53,10 +54,10 @@ abstract class getVal_Test extends XArrayUnitTestCaseBase  {
         $x = $this->newXArray(['foo' => 'bar']);
 
         // act
-        $result = $x->getVal('qux', true);
+        $result = $x->getString('qux', 'fred');
 
         // assert
-        $this->assertEquals(true, $result);
+        $this->assertEquals('fred', $result);
     }
 
     /**
@@ -69,7 +70,7 @@ abstract class getVal_Test extends XArrayUnitTestCaseBase  {
         $x = $this->newXArray(['foo' => 'bar']);
 
         // act
-        $x->getVal('');
+        $x->getString('');
     }
     
     /**
@@ -123,6 +124,35 @@ abstract class getVal_Test extends XArrayUnitTestCaseBase  {
                 ['foo' => ['bar' => ['baz' => ['qux', 'fred']]]],
                 'foo/bar/baz',
                 'qux'
+            ],
+            'object with __toString' => [
+                ['foo' => new class {
+                    public function __toString() {
+                        return 'asdf';
+                    }
+                }],
+                'foo',
+                'asdf'
+            ],
+            'bool true' => [
+                ['foo' => true],
+                'foo',
+                'true'
+            ],
+            'bool false' => [
+                ['foo' => false],
+                'foo',
+                'false'
+            ],
+            'int' => [
+                ['foo' => 123],
+                'foo',
+                '123'
+            ],
+            'float' => [
+                ['foo' => 1.23],
+                'foo',
+                '1.23'
             ]
         ];
     }

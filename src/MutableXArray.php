@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * MindTouch XArray
  *
@@ -27,8 +27,10 @@ namespace MindTouch\XArray;
 class MutableXArray extends XArray{
 
     /**
-     * @param array &$array - reference to array
+     * @param array $array - reference to array
      */
-    /** @noinspection PhpMissingParentConstructorInspection */
-    public function __construct(array &$array) { $this->array = &$array; }
+    public function __construct(array &$array) {
+        parent::__construct($array);
+        $this->array = &$array;
+    }
 }
