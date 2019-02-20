@@ -39,6 +39,21 @@ abstract class getAll_Test extends XArrayUnitTestCaseBase  {
         // assert
         $this->assertEquals($expected, $result);
     }
+
+    /**
+     * @test
+     */
+    public function Can_get_null_default_value() {
+
+        // arrange
+        $x = $this->newXArray(['foo' => ['bar', 'baz']]);
+
+        // act
+        $result = $x->getAll('qux', null);
+
+        // assert
+        $this->assertNull($result);
+    }
     
     /**
      * @return array

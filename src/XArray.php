@@ -83,10 +83,10 @@ class XArray {
      * If the found value is a single value, it is wrapped in an array then returned.
      *
      * @param string $key - the array path to return, i.e. /pages/content
-     * @param array $default - if the key is not found, this array will be returned
+     * @param array|null $default - if the key is not found, this array or null will be returned
      * @return array|null
      */
-    public function getAll(string $key = '', array $default = []) : ?array {
+    public function getAll(string $key = '', ?array $default = []) : ?array {
         $array = $this->array;
         if($key === '') {
             return $array;
