@@ -23,7 +23,8 @@
   },
   "autoload": {
     "psr-4": {
-      "modethirteen\\XArray\\": ["src/"]
+      "modethirteen\\XArray\\": ["src/"],
+      "MindTouch\\XArray\\": ["compatibility/"]
     }
   },
   "autoload-dev": {

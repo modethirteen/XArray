@@ -36,4 +36,16 @@ class __ctor_Test extends TestCase {
         // assert
         $this->assertNotSame($source, $x->toArray());
     }
+
+    /**
+     * @test
+     */
+    public function Can_construct_compatibility_class() {
+
+        // act
+        $x = new \MindTouch\XArray\XArray();
+
+        // assert
+        $this->assertTrue(is_subclass_of($x, XArray::class));
+    }
 }
