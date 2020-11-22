@@ -1,38 +1,45 @@
 # XArray
+
 A utility for traversing PHP arrays with an XPath-like syntax.
 
-[![travis-ci.org](https://travis-ci.org/MindTouch/XArray.php.svg?branch=master)](https://travis-ci.org/MindTouch/XArray.php)
-[![codecov.io](https://codecov.io/github/MindTouch/XArray.php/coverage.svg?branch=master)](https://codecov.io/github/MindTouch/XArray.php?branch=master)
-[![Latest Stable Version](https://poser.pugx.org/mindtouch/xarray/version.svg)](https://packagist.org/packages/mindtouch/xarray)
-[![Latest Unstable Version](https://poser.pugx.org/mindtouch/xarray/v/unstable)](https://packagist.org/packages/mindtouch/xarray)
+[![travis-ci.org](https://travis-ci.org/modethirteen/XArray.php.svg?branch=master)](https://travis-ci.org/modethirteen/XArray.php)
+[![codecov.io](https://codecov.io/github/modethirteen/XArray.php/coverage.svg?branch=master)](https://codecov.io/github/modethirteen/XArray.php?branch=master)
+[![Latest Stable Version](https://poser.pugx.org/modethirteen/xarray/version.svg)](https://packagist.org/packages/modethirteen/xarray)
+[![Latest Unstable Version](https://poser.pugx.org/modethirteen/xarray/v/unstable)](https://packagist.org/packages/modethirteen/xarray)
 
 ## Requirements
+
 * PHP 5.4, 5.5, 5.6 (0.1.x)
 * PHP 7.2+ (master, 1.x)
 
 ## Installation
+
 Use [Composer](https://getcomposer.org/). There are two ways to add XArray to your project.
 
 From the composer CLI:
+
 ```sh
-$ ./composer.phar require mindtouch/xarray
+$ ./composer.phar require modethirteen/xarray
 ```
 
-Or add mindtouch/xarray to your project's composer.json:
+Or add modethirteen/xarray to your project's composer.json:
+
 ```json
 {
     "require": {
-        "mindtouch/xarray": "dev-master"
+        "modethirteen/xarray": "dev-master"
     }
 }
 ```
+
 "dev-master" is the master development branch. If you are using XArray in a production environment, it is advised that you use a stable release.
 
-Assuming you have setup Composer's autoloader, XArray can be found in the MindTouch\XArray\ namespace.
+Assuming you have setup Composer's autoloader, XArray can be found in the modethirteen\XArray\ namespace.
 
 ## Usage
 
-### XArray
+### XArray.php
+
 ```php
 // use XArray from scratch
 $x1 = new XArray();
@@ -84,21 +91,25 @@ $array2 = $x2->toArray();
 assert($array1 !== $array2);
 
 // get an XML representation of the array
-$xml = $x2->toXml('mindtouch');
-```
-```xml
-<foo>
-    <bar>qux</bar>
-    <bar>baz</bar>
-</foo>
-<qux>fred</qux>
-<qux>quxx</qux>
-<bar>foo</bar>
-<querty>true</querty>
-<asdf>zxcv</asdf>
+$xml = $x2->toXml('xyzzy');
 ```
 
-### MutableXArray (extends XArray)
+```xml
+<xyzzy>
+    <foo>
+        <bar>qux</bar>
+        <bar>baz</bar>
+    </foo>
+    <qux>fred</qux>
+    <qux>quxx</qux>
+    <bar>foo</bar>
+    <querty>true</querty>
+    <asdf>zxcv</asdf>
+</xyzzy>
+```
+
+### MutableXArray.php (extends XArray.php)
+
 ```php
 // MutableXArray always requires a source array
 $array1 = [
