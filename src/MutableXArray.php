@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MindTouch\XArray;
+namespace modethirteen\XArray;
 
 /**
  * Class MutableXArray - get/set accessors for arrays
  * 
- * @package MindTouch\XArray
+ * @package modethirteen\XArray
  */
 class MutableXArray extends XArray{
 

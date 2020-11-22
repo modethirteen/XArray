@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MindTouch\XArray\tests\XArray;
+namespace modethirteen\XArray\tests\XArray;
 
-use MindTouch\XArray\XArray;
+use modethirteen\XArray\XArray;
 
-class setVal_Test extends \MindTouch\XArray\tests\XArrayBase\setVal_Test  {
+class setVal_Test extends \modethirteen\XArray\tests\XArrayBase\setVal_Test  {
 
     /**
      * @var string

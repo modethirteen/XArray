@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MindTouch\XArray\tests\XArrayBase;
+namespace modethirteen\XArray\tests\XArrayBase;
 
 abstract class getString_Test extends XArrayUnitTestCaseBase  {
 

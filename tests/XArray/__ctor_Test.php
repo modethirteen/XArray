@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace MindTouch\XArray\tests\XArray;
+namespace modethirteen\XArray\tests\XArray;
 
-use MindTouch\XArray\XArray;
+use modethirteen\XArray\XArray;
 use PHPUnit\Framework\TestCase;
 
 class __ctor_Test extends TestCase {
