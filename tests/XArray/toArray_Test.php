@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace modethirteen\XArray\tests\XArray;
+namespace modethirteen\XArray\Tests\XArray;
 
 use modethirteen\XArray\XArray;
 
-class toArray_Test extends \modethirteen\XArray\tests\XArrayBase\toArray_Test  {
+class toArray_Test extends \modethirteen\XArray\Tests\XArrayBase\toArray_Test  {
 
     /**
      * @var string
      */
-    protected static $class = XArray::class;
+    protected static string $class = XArray::class;
 }

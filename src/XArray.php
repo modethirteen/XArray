@@ -67,10 +67,10 @@ class XArray {
     /**
      * @var array
      */
-    protected $array = [];
+    protected array $array = [];
 
     /**
-     * @param array $array - array values to create XArray from. If not supplied, XArray will start empty
+     * @param array|null $array $array - array values to create XArray from. If not supplied, XArray will start empty
      */
     public function __construct(array $array = null) { $this->array = $array !== null ? $array : []; }
 
@@ -170,18 +170,22 @@ class XArray {
      * @param mixed $value
      * @return void
      */
-    public function setVal(string $key, $value = null) : void { $this->setValHelper($this->array, $key, $value); }
+    public function setVal(string $key, $value = null) : void {
+        $this->setValHelper($this->array, $key, $value);
+    }
 
     /**
      * Return the array as an XML string
      *
-     * @param string $outer - optional output tag, used for recursion
+     * @param string|null $outer - optional output tag, used for recursion
      * @return string - xml string representation of the array
      */
     public function toXml(string $outer = null) : string {
         $result = '';
         foreach($this->array as $key => $value) {
             $key = self::getStringValue($key);
+
+            /** @noinspection PhpStatementHasEmptyBodyInspection */
             if(strncmp($key, '@', 1) === 0) {
 
                 // skip attributes

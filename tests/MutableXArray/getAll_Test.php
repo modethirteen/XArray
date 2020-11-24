@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace modethirteen\XArray\tests\MutableXArray;
+namespace modethirteen\XArray\Tests\MutableXArray;
 
 use modethirteen\XArray\MutableXArray;
 
-class getAll_Test extends \modethirteen\XArray\tests\XArrayBase\getAll_Test  {
+class getAll_Test extends \modethirteen\XArray\Tests\XArrayBase\getAll_Test  {
 
     /**
      * @var string
      */
-    protected static $class = MutableXArray::class;
+    protected static string $class = MutableXArray::class;
 }

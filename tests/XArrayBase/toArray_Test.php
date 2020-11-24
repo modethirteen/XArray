@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace modethirteen\XArray\tests\XArrayBase;
+namespace modethirteen\XArray\Tests\XArrayBase;
 
 abstract class toArray_Test extends XArrayUnitTestCaseBase  {
 
     /**
      * @test
      */
-    public function Can_return_new_array_created_from_empty_ctor() {
+    public function Can_return_new_array_created_from_empty_ctor() : void {
     
         // arrange
         $X = $this->newXArray();
@@ -37,7 +37,7 @@ abstract class toArray_Test extends XArrayUnitTestCaseBase  {
     /**
      * @test
      */
-    public function Can_return_non_modified_array_created_from_array() {
+    public function Can_return_non_modified_array_created_from_array() : void {
     
         // arrange
         $array = ['foo' => ['bar' => 'baz']];
@@ -53,7 +53,7 @@ abstract class toArray_Test extends XArrayUnitTestCaseBase  {
     /**
      * @test
      */
-    public function Can_return_modified_array_created_from_array() {
+    public function Can_return_modified_array_created_from_array() : void {
         
         // arrange
         $array = ['foo' => ['bar' => 'baz']];

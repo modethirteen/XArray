@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace modethirteen\XArray\tests\XArrayBase;
+namespace modethirteen\XArray\Tests\XArrayBase;
 
 abstract class getVal_Test extends XArrayUnitTestCaseBase  {
 
@@ -25,7 +25,7 @@ abstract class getVal_Test extends XArrayUnitTestCaseBase  {
      * @param string $xpath
      * @param mixed $expected
      */
-    public function Can_get_value(array $source, string $xpath, $expected) {
+    public function Can_get_value(array $source, string $xpath, $expected) : void {
 
         // arrange
         $x = $this->newXArray($source);
@@ -40,7 +40,7 @@ abstract class getVal_Test extends XArrayUnitTestCaseBase  {
     /**
      * @test
      */
-    public function Can_get_default() {
+    public function Can_get_default() : void {
 
         // arrange
         $x = $this->newXArray(['foo' => 'bar']);
@@ -55,7 +55,7 @@ abstract class getVal_Test extends XArrayUnitTestCaseBase  {
     /**
      * @test
      */
-    public function Empty_key_returns_null() {
+    public function Empty_key_returns_null() : void {
 
         // arrange
         $x = $this->newXArray(['foo' => 'bar']);

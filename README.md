@@ -10,7 +10,8 @@ A utility for traversing PHP arrays with an XPath-like syntax.
 ## Requirements
 
 * PHP 5.4, 5.5, 5.6 (0.1.x)
-* PHP 7.2+ (master, 1.x)
+* PHP 7.2, 7.3 (php72, 1.x)
+* PHP 7.4+ (master, 2.x)
 
 ## Installation
 
@@ -19,7 +20,7 @@ Use [Composer](https://getcomposer.org/). There are two ways to add XArray to yo
 From the composer CLI:
 
 ```sh
-$ ./composer.phar require modethirteen/xarray
+./composer.phar require modethirteen/xarray
 ```
 
 Or add modethirteen/xarray to your project's composer.json:
@@ -32,9 +33,9 @@ Or add modethirteen/xarray to your project's composer.json:
 }
 ```
 
-"dev-master" is the master development branch. If you are using XArray in a production environment, it is advised that you use a stable release.
+`dev-master` is the master development branch. If you are using XArray in a production environment, it is advised that you use a stable release.
 
-Assuming you have setup Composer's autoloader, XArray can be found in the modethirteen\XArray\ namespace.
+Assuming you have setup Composer's autoloader, XArray can be found in the `modethirteen\XArray\` namespace.
 
 ## Usage
 

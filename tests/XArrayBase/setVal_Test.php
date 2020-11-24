@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace modethirteen\XArray\tests\XArrayBase;
+namespace modethirteen\XArray\Tests\XArrayBase;
 
 abstract class setVal_Test extends XArrayUnitTestCaseBase {
 
@@ -26,7 +26,7 @@ abstract class setVal_Test extends XArrayUnitTestCaseBase {
      * @param mixed $value
      * @param array $expected
      */
-    public function Can_set_value(array $source, string $xpath, $value, array $expected) {
+    public function Can_set_value(array $source, string $xpath, $value, array $expected) : void {
 
         // arrange
         $x = $this->newXArray($source);

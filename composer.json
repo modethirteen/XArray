@@ -15,21 +15,20 @@
     "issues": "https://github.com/modethirteen/XArray.php/issues"
   },
   "require": {
-    "php": ">=7.2.0"
+    "php": "~7.4.12"
   },
   "require-dev": {
-    "phpstan/phpstan": "0.11.1",
-    "phpunit/phpunit": "7.4.3"
+    "phpstan/phpstan": "~0.12.57",
+    "phpunit/phpunit": "~9.4.3"
   },
   "autoload": {
     "psr-4": {
-      "modethirteen\\XArray\\": ["src/"],
-      "MindTouch\\XArray\\": ["compatibility/"]
+      "modethirteen\\XArray\\": ["src/"]
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "modethirteen\\XArray\\tests\\": ["tests/"]
+      "modethirteen\\XArray\\Tests\\": ["tests/"]
     }
   }
 }

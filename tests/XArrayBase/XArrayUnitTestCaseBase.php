@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace modethirteen\XArray\tests\XArrayBase;
+namespace modethirteen\XArray\Tests\XArrayBase;
 
 use modethirteen\XArray\XArray;
 use PHPUnit\Framework\TestCase;
@@ -24,7 +24,7 @@ abstract class XArrayUnitTestCaseBase extends TestCase  {
     /**
      * @var string
      */
-    protected static $class;
+    protected static string $class;
 
     /**
      * @param array|null $array

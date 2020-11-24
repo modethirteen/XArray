@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace modethirteen\XArray\tests\XArrayBase;
+namespace modethirteen\XArray\Tests\XArrayBase;
 
 abstract class toXml_Test extends XArrayUnitTestCaseBase  {
 
     /**
      * @test
      */
-    public function Simple_array_with_attributes_and_text() {
+    public function Simple_array_with_attributes_and_text() : void {
 
         // arrange
         $source = ['p' => ['@attr1' => 'val1', '@attr2' => 'val2', '#text' => 'text']];
@@ -37,7 +37,7 @@ abstract class toXml_Test extends XArrayUnitTestCaseBase  {
     /**
      * @test
      */
-    public function Nested_array_with_attributes_and_text() {
+    public function Nested_array_with_attributes_and_text() : void {
 
         // arrange
         $source = [
@@ -64,7 +64,7 @@ abstract class toXml_Test extends XArrayUnitTestCaseBase  {
     /**
      * @test
      */
-    public function Nested_array_with_attributes_and_text_and_outer_xml() {
+    public function Nested_array_with_attributes_and_text_and_outer_xml() : void {
         
         // arrange
         $source = [
@@ -93,7 +93,7 @@ abstract class toXml_Test extends XArrayUnitTestCaseBase  {
      *
      * @test
      */
-    public function Attributes_with_special_characters_are_encoded() {
+    public function Attributes_with_special_characters_are_encoded() : void {
 
         // arrange
         $source = ['p' => ['@attr1"&\'<>' => 'val1', '#text' => 'text']];
@@ -111,7 +111,7 @@ abstract class toXml_Test extends XArrayUnitTestCaseBase  {
      *
      * @test
      */
-    public function Attribute_values_with_special_characters_are_encoded() {
+    public function Attribute_values_with_special_characters_are_encoded() : void {
 
         // arrange
         $source = ['p' => ['@attr1' => 'val1"&\'<>', '#text' => 'text']];
@@ -129,7 +129,7 @@ abstract class toXml_Test extends XArrayUnitTestCaseBase  {
      *
      * @test
      */
-    public function Text_with_special_characters_are_encoded() {
+    public function Text_with_special_characters_are_encoded() : void {
 
         // arrange
         $source = ['p' => ['#text' => 'text"&\'<>']];
@@ -147,7 +147,7 @@ abstract class toXml_Test extends XArrayUnitTestCaseBase  {
      *
      * @test
      */
-    public function Xml_tags_with_special_characters_are_encoded() {
+    public function Xml_tags_with_special_characters_are_encoded() : void {
 
         // arrange
         $source = ['p"&\'<>' => ['#text' => 'text']];
@@ -165,7 +165,7 @@ abstract class toXml_Test extends XArrayUnitTestCaseBase  {
      *
      * @test
      */
-    public function Xml_values_with_special_characters_are_encoded() {
+    public function Xml_values_with_special_characters_are_encoded() : void {
 
         // arrange
         $source = ['p' => 'val"&\'<>'];
@@ -181,7 +181,7 @@ abstract class toXml_Test extends XArrayUnitTestCaseBase  {
     /**
      * @test
      */
-    public function Can_handle_numeric_arrays() {
+    public function Can_handle_numeric_arrays() : void {
     
         // arrange
         $source = ['foo' => [
@@ -199,7 +199,7 @@ abstract class toXml_Test extends XArrayUnitTestCaseBase  {
     /**
      * @test
      */
-    public function Can_handle_non_string_types() {
+    public function Can_handle_non_string_types() : void {
 
           // arrange
         $source = [
