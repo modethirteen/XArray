@@ -10,7 +10,7 @@ cache:
 install: composer install
 
 script:
-  - vendor/bin/phpstan analyse --level 7 src
+  - vendor/bin/phpstan analyse
   - vendor/bin/phpunit --configuration phpunit.xml.dist --coverage-clover=coverage.xml
 
 after_success:
