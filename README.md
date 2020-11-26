@@ -28,12 +28,12 @@ Or add modethirteen/xarray to your project's composer.json:
 ```json
 {
     "require": {
-        "modethirteen/xarray": "dev-master"
+        "modethirteen/xarray": "dev-main"
     }
 }
 ```
 
-`dev-master` is the master development branch. If you are using XArray in a production environment, it is advised that you use a stable release.
+`dev-main` is the main development branch. If you are using XArray in a production environment, it is advised that you use a stable release.
 
 Assuming you have setup Composer's autoloader, XArray can be found in the `modethirteen\XArray\` namespace.
 
