@@ -2,7 +2,7 @@
 
 A utility for traversing PHP arrays with an XPath-like syntax.
 
-[![travis-ci.org](https://travis-ci.org/modethirteen/XArray.svg?branch=master)](https://travis-ci.org/modethirteen/XArray)
+[![travis-ci.com](https://travis-ci.com/modethirteen/XArray.svg?branch=master)](https://travis-ci.com/modethirteen/XArray)
 [![codecov.io](https://codecov.io/github/modethirteen/XArray/coverage.svg?branch=master)](https://codecov.io/github/modethirteen/XArray?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/modethirteen/xarray/version.svg)](https://packagist.org/packages/modethirteen/xarray)
 [![Latest Unstable Version](https://poser.pugx.org/modethirteen/xarray/v/unstable)](https://packagist.org/packages/modethirteen/xarray)
