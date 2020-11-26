@@ -11,7 +11,7 @@ A utility for traversing PHP arrays with an XPath-like syntax.
 
 * PHP 5.4, 5.5, 5.6 (0.1.x)
 * PHP 7.2, 7.3 (php72, 1.x)
-* PHP 7.4+ (master, 2.x)
+* PHP 7.4+ (main, 2.x)
 
 ## Installation
 
