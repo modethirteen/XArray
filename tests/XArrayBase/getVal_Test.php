@@ -19,19 +19,114 @@ namespace modethirteen\XArray\Tests\XArrayBase;
 abstract class getVal_Test extends XArrayUnitTestCaseBase  {
 
     /**
+     * @return array
+     */
+    public static function source_key_expected_Provider() : array {
+        return [
+            'empty level one' => [
+                [],
+                'foo',
+                '',
+            ],
+            'empty level two' => [
+                ['foo' => ''],
+                'foo/bar',
+                '',
+            ],
+            'empty level three' => [
+                ['foo' => ['bar' => '']],
+                'foo/bar/baz',
+                '',
+            ],
+            'string level one' => [
+                ['foo' => 'bar'],
+                'foo',
+                'bar',
+            ],
+            'string level two' => [
+                ['foo' => ['bar' => 'baz']],
+                'foo/bar',
+                'baz',
+            ],
+            'string level three' => [
+                ['foo' => ['bar' => ['baz' => 'qux']]],
+                'foo/bar/baz',
+                'qux',
+            ],
+
+            // XArray::getVal(...) only gets first element of array value
+            'array level one' => [
+                ['foo' => ['bar', 'baz']],
+                'foo',
+                ['bar', 'baz'],
+            ],
+            'array level two' => [
+                ['foo' => ['bar' => ['baz', 'qux']]],
+                'foo/bar',
+                ['baz', 'qux']
+            ],
+            'array level three' => [
+                ['foo' => ['bar' => ['baz' => ['qux', 'fred']]]],
+                'foo/bar/baz',
+                ['qux', 'fred']
+            ],
+            'array of arrays level zero' => [
+                [['foo', 'bar'], ['baz'], ['qux']],
+                '',
+                null
+            ],
+            'array of arrays level one' => [
+                ['plugh' => [['foo', 'bar'], ['baz'], ['qux']]],
+                'plugh',
+                [['foo', 'bar'], ['baz'], ['qux']]
+            ],
+            'array of arrays level two' => [
+                ['plugh' => ['xyzzy' => [['foo', 'bar'], ['baz'], ['qux']]]],
+                'plugh/xyzzy',
+                [['foo', 'bar'], ['baz'], ['qux']]
+            ],
+            'array of arrays level three' => [
+                ['plugh' => ['xyzzy' => ['ogre' => [['foo', 'bar'], ['baz'], ['qux']]]]],
+                'plugh/xyzzy/ogre',
+                [['foo', 'bar'], ['baz'], ['qux']]
+            ],
+            'array of arrays level four' => [
+                ['plugh' => ['xyzzy' => ['ogre' => ['nivek' => [['foo', 'bar'], ['baz'], ['qux']]]]]],
+                'plugh/xyzzy/ogre/nivek',
+                [['foo', 'bar'], ['baz'], ['qux']]
+            ],
+            'array of arrays level two with level one key' => [
+                ['plugh' => ['xyzzy' => [['foo', 'bar'], ['baz'], ['qux']]]],
+                'plugh',
+                ['xyzzy' => [['foo', 'bar'], ['baz'], ['qux']]]
+            ],
+            'array of arrays level three with level two key' => [
+                ['plugh' => ['xyzzy' => ['ogre' => [['foo', 'bar'], ['baz'], ['qux']]]]],
+                'plugh/xyzzy',
+                ['ogre' => [['foo', 'bar'], ['baz'], ['qux']]]
+            ],
+            'array of arrays level four with level three key' => [
+                ['plugh' => ['xyzzy' => ['ogre' => ['nivek' => [['foo', 'bar'], ['baz'], ['qux']]]]]],
+                'plugh/xyzzy/ogre',
+                ['nivek' => [['foo', 'bar'], ['baz'], ['qux']]]
+            ]
+        ];
+    }
+
+    /**
      * @test
-     * @dataProvider source_xpath_expected_Provider
+     * @dataProvider source_key_expected_Provider
      * @param array $source
-     * @param string $xpath
+     * @param string $key
      * @param mixed $expected
      */
-    public function Can_get_value(array $source, string $xpath, $expected) : void {
+    public function Can_get_value(array $source, string $key, $expected) : void {
 
         // arrange
         $x = $this->newXArray($source);
 
         // act
-        $result = $x->getVal($xpath);
+        $result = $x->getVal($key);
 
         // assert
         $this->assertEquals($expected, $result);
@@ -65,60 +160,5 @@ abstract class getVal_Test extends XArrayUnitTestCaseBase  {
 
         // assert
         $this->assertNull($result);
-    }
-    
-    /**
-     * @return array
-     */
-    public static function source_xpath_expected_Provider() : array {
-        return [
-            'empty level one' => [
-                [],
-                'foo',
-                '',
-            ],
-            'empty level two' => [
-                ['foo' => ''],
-                'foo/bar',
-                '',
-            ],
-            'empty level three' => [
-                ['foo' => ['bar' => '']],
-                'foo/bar/baz',
-                '',
-            ],
-            'string level one' => [
-                ['foo' => 'bar'],
-                'foo',
-                'bar',
-            ],
-            'string level two' => [
-                ['foo' => ['bar' => 'baz']],
-                'foo/bar',
-                'baz',
-            ],
-            'string level three' => [
-                ['foo' => ['bar' => ['baz' => 'qux']]],
-                'foo/bar/baz',
-                'qux',
-            ],
-            
-            // XArray::getVal(...) only gets first element of array value
-            'array level one' => [
-                ['foo' => ['bar', 'baz']],
-                'foo',
-                'bar',
-            ],
-            'array level two' => [
-                ['foo' => ['bar' => ['baz', 'qux']]],
-                'foo/bar',
-                'baz'
-            ],
-            'array level three' => [
-                ['foo' => ['bar' => ['baz' => ['qux', 'fred']]]],
-                'foo/bar/baz',
-                'qux'
-            ]
-        ];
     }
 }

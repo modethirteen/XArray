@@ -16,6 +16,8 @@
  */
 namespace modethirteen\XArray\Tests\XArrayBase;
 
+use modethirteen\XArray\SchemaLockedArray;
+
 abstract class toXml_Test extends XArrayUnitTestCaseBase  {
 
     /**
@@ -227,6 +229,12 @@ abstract class toXml_Test extends XArrayUnitTestCaseBase  {
         $xml = $x->toXml();
 
         // assert
-        $this->assertEquals('<div attr1="true" attr2="123">text<p attr4="1.45" attr5="zxcv">text2</p><541>foo</541></div>', $xml, 'XML output was incorrect');
+        if(static::$class === SchemaLockedArray::class) {
+
+            // schema can not allowlist an integer as a segment of a key path
+            $this->assertEquals('<div attr1="true" attr2="123">text<p attr4="1.45" attr5="zxcv">text2</p></div>', $xml, 'XML output was incorrect');
+        } else {
+            $this->assertEquals('<div attr1="true" attr2="123">text<p attr4="1.45" attr5="zxcv">text2</p><541>foo</541></div>', $xml, 'XML output was incorrect');
+        }
     }
 }

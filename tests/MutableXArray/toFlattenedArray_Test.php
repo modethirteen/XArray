@@ -18,26 +18,10 @@ namespace modethirteen\XArray\Tests\MutableXArray;
 
 use modethirteen\XArray\MutableXArray;
 
-class setVal_Test extends \modethirteen\XArray\Tests\XArrayBase\setVal_Test  {
+class toFlattenedArray_Test extends \modethirteen\XArray\Tests\XArrayBase\toFlattenedArray_Test  {
 
     /**
      * @var string
      */
     protected static string $class = MutableXArray::class;
-
-    /**
-     * @test
-     */
-    public function Can_mutate_original_array() : void {
-        
-        // arrange
-        $array = ['foo' => ['bar' => 'baz']];
-        $x = new MutableXArray($array);
-        
-        // act
-        $x->setVal('qux', 'fred');
-        
-        // assert
-        $this->assertEquals(['foo' => ['bar' => 'baz'], 'qux' => 'fred'], $array);
-    }
 }

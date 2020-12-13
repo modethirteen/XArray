@@ -16,46 +16,14 @@
  */
 namespace modethirteen\XArray\Tests\XArrayBase;
 
+use modethirteen\XArray\SchemaLockedArray;
+
 abstract class getAll_Test extends XArrayUnitTestCaseBase  {
 
     /**
-     * @test
-     * @dataProvider source_xpath_expected_Provider
-     * @param array $source
-     * @param string $xpath
-     * @param array $expected
-     */
-    public function Can_get_all_values(array $source, string $xpath, array $expected) : void {
-        
-        // arrange
-        $x = $this->newXArray($source);
-
-        // act
-        $result = $x->getAll($xpath);
-
-        // assert
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * @test
-     */
-    public function Can_get_null_default_value() : void {
-
-        // arrange
-        $x = $this->newXArray(['foo' => ['bar', 'baz']]);
-
-        // act
-        $result = $x->getAll('qux', null);
-
-        // assert
-        $this->assertNull($result);
-    }
-    
-    /**
      * @return array
      */
-    public static function source_xpath_expected_Provider() : array {
+    public static function source_key_expected_Provider() : array {
         return [
             'empty level zero' => [
                 [],
@@ -116,7 +84,63 @@ abstract class getAll_Test extends XArrayUnitTestCaseBase  {
                 ['foo' => ['bar' => ['baz' => ['qux', 'fred']]]],
                 'foo/bar/baz',
                 ['qux', 'fred']
+            ],
+            'array of arrays level zero' => [
+                [['foo', 'bar'], ['baz'], ['qux']],
+                '',
+
+                // cannot setup schema locked array with values without an allowlisted key path
+                static::$class === SchemaLockedArray::class ? [] : [['foo', 'bar'], ['baz'], ['qux']]
+            ],
+            'array of arrays level one' => [
+                ['plugh' => [['foo', 'bar'], ['baz'], ['qux']]],
+                'plugh',
+                [['foo', 'bar'], ['baz'], ['qux']]
+            ],
+            'array of arrays level two' => [
+                ['plugh' => ['xyzzy' => [['foo', 'bar'], ['baz'], ['qux']]]],
+                'plugh/xyzzy',
+                [['foo', 'bar'], ['baz'], ['qux']]
+            ],
+            'array of arrays level three' => [
+                ['plugh' => ['xyzzy' => ['ogre' => [['foo', 'bar'], ['baz'], ['qux']]]]],
+                'plugh/xyzzy/ogre',
+                [['foo', 'bar'], ['baz'], ['qux']]
             ]
         ];
+    }
+
+    /**
+     * @test
+     * @dataProvider source_key_expected_Provider
+     * @param array $source
+     * @param string $key
+     * @param array $expected
+     */
+    public function Can_get_all_values(array $source, string $key, array $expected) : void {
+        
+        // arrange
+        $x = $this->newXArray($source);
+
+        // act
+        $result = $x->getAll($key);
+
+        // assert
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function Can_get_array_default_value() : void {
+
+        // arrange
+        $x = $this->newXArray(['foo' => ['bar', 'baz']]);
+
+        // act
+        $result = $x->getAll('qux');
+
+        // assert
+        $this->assertEquals([], $result);
     }
 }

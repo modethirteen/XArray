@@ -16,6 +16,9 @@
  */
 namespace modethirteen\XArray\Tests\XArrayBase;
 
+use modethirteen\XArray\Exception\SchemaLockedArrayUndefinedKeyException;
+use modethirteen\XArray\SchemaBuilder;
+use modethirteen\XArray\SchemaLockedArray;
 use modethirteen\XArray\XArray;
 use PHPUnit\Framework\TestCase;
 
@@ -27,11 +30,26 @@ abstract class XArrayUnitTestCaseBase extends TestCase  {
     protected static string $class;
 
     /**
-     * @param array|null $array
+     * @param array $array
+     * @param SchemaBuilder|null $schemaBuilder - default schema builder will be inferred from source array
      * @return XArray
      */
-    protected function newXArray(array $array = []) : XArray {
+    protected function newXArray(array $array, SchemaBuilder $schemaBuilder = null) : XArray {
         $class = static::$class;
-        return new $class($array);
+        if($class !== SchemaLockedArray::class) {
+            return new $class($array);
+        }
+
+        // special schema bootstrapping for schema locked arrays
+        $source = new XArray($array);
+        $x = new SchemaLockedArray($schemaBuilder !== null ? $schemaBuilder : SchemaBuilder::newFromXArray($source));
+        foreach($source->toFlattenedArray() as $key => $value) {
+            try {
+                $x->setVal($key, $value);
+            } catch(SchemaLockedArrayUndefinedKeyException $e) {
+                static::fail($e->getMessage());
+            }
+        }
+        return $x;
     }
 }

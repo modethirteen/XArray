@@ -14,30 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace modethirteen\XArray\Tests\MutableXArray;
+namespace modethirteen\XArray\Exception;
 
-use modethirteen\XArray\MutableXArray;
+use Exception;
 
-class setVal_Test extends \modethirteen\XArray\Tests\XArrayBase\setVal_Test  {
-
-    /**
-     * @var string
-     */
-    protected static string $class = MutableXArray::class;
+class SchemaLockedArrayUndefinedKeyException extends Exception {
 
     /**
-     * @test
+     * @param string $key
      */
-    public function Can_mutate_original_array() : void {
-        
-        // arrange
-        $array = ['foo' => ['bar' => 'baz']];
-        $x = new MutableXArray($array);
-        
-        // act
-        $x->setVal('qux', 'fred');
-        
-        // assert
-        $this->assertEquals(['foo' => ['bar' => 'baz'], 'qux' => 'fred'], $array);
+    public function __construct(string $key) {
+        parent::__construct('Could not set array key not defined in schema: ' . $key);
     }
 }
+

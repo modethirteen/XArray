@@ -14,30 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace modethirteen\XArray\Tests\MutableXArray;
+namespace modethirteen\XArray\Tests\SchemaLockedArray;
 
-use modethirteen\XArray\MutableXArray;
+use modethirteen\XArray\SchemaLockedArray;
 
-class setVal_Test extends \modethirteen\XArray\Tests\XArrayBase\setVal_Test  {
+class toXml_Test extends \modethirteen\XArray\Tests\XArrayBase\toXml_Test  {
 
     /**
      * @var string
      */
-    protected static string $class = MutableXArray::class;
-
-    /**
-     * @test
-     */
-    public function Can_mutate_original_array() : void {
-        
-        // arrange
-        $array = ['foo' => ['bar' => 'baz']];
-        $x = new MutableXArray($array);
-        
-        // act
-        $x->setVal('qux', 'fred');
-        
-        // assert
-        $this->assertEquals(['foo' => ['bar' => 'baz'], 'qux' => 'fred'], $array);
-    }
+    protected static string $class = SchemaLockedArray::class;
 }

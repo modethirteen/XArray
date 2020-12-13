@@ -32,10 +32,10 @@ class setVal_Test extends \modethirteen\XArray\Tests\XArrayBase\setVal_Test  {
         
         // arrange
         $array = ['foo' => ['bar' => 'baz']];
-        $X = new XArray($array);
+        $x = new XArray($array);
         
         // act
-        $X->setVal('qux', 'fred');
+        $x->setVal('qux', 'fred');
         
         // assert
         $this->assertEquals(['foo' => ['bar' => 'baz']], $array);

@@ -30,4 +30,15 @@ class MutableXArray extends XArray{
         parent::__construct($array);
         $this->array = &$array;
     }
+
+    /**
+     * Retrieve all possible key paths in the array
+     *
+     * @return string[]
+     */
+    public function getKeys() : array {
+
+        // mutable xarray ignores the cached key path list, as the array may be mutated outside of this instance
+        return $this->getKeysHelper('', $this->array);
+    }
 }

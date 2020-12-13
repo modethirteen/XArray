@@ -16,6 +16,8 @@
  */
 namespace modethirteen\XArray;
 
+use Closure;
+
 /**
  * Class XArray - get/set accessors for arrays
  *
@@ -24,104 +26,14 @@ namespace modethirteen\XArray;
 class XArray {
 
     /**
-     * Get string representation of value
-     *
-     * @param mixed $value
-     * @return string
-     */
-    private static function getStringValue($value) : string {
-        if(is_bool($value)) {
-            return $value === true ? 'true' : 'false';
-        }
-        return !is_string($value) ? strval($value) : $value;
-    }
-
-    /**
      * @param array $array
-     * @param string $key
-     * @param mixed $value
-     * @return void
-     */
-    private static function setValHelper(array &$array, string $key, $value) : void {
-        $keys = explode('/', $key);
-        $count = count($keys);
-        $i = 0;
-        foreach($keys as $key) {
-            $i++;
-            if($i == $count) {
-                if($value === null) {
-                    unset($array[$key]);
-                    return;
-                }
-                $array[$key] = $value;
-            } else if(!isset($array[$key])) {
-                $array[$key] = [];
-            }
-            if(is_string($array[$key])) {
-                return;
-            }
-            $array = &$array[$key];
-        }
-    }
-
-    /**
-     * @var array
-     */
-    protected array $array = [];
-
-    /**
-     * @param array|null $array $array - array values to create XArray from. If not supplied, XArray will start empty
-     */
-    public function __construct(array $array = null) { $this->array = $array !== null ? $array : []; }
-
-    /**
-     * Find $key in the XArray, which is delimited by /
-     * If the found value is itself an array of multiple values, the array is returned.
-     * If the found value is a single value, it is wrapped in an array then returned.
-     *
      * @param string $key - the array path to return, i.e. /pages/content
-     * @param array|null $default - if the key is not found, this array or null will be returned
-     * @return array|null
-     */
-    public function getAll(string $key = '', ?array $default = []) : ?array {
-        $array = $this->array;
-        if($key === '') {
-            return $array;
-        }
-        $keys = explode('/', $key);
-        $count = count($keys);
-        $i = 0;
-        foreach($keys as $val) {
-            $i++;
-            if($val === '') {
-                continue;
-            }
-            if(!isset($array[$val])) {
-                return $default;
-            }
-            if(!is_array($array[$val])) {
-                return [$array[$val]];
-            }
-            $array = $array[$val];
-            if($i == $count) {
-                if(key($array) !== 0) {
-                    $array = [$array];
-                }
-            }
-        }
-        return $array;
-    }
-
-    /**
-     * Find $key in the XArray, which is delimited by /
-     * If the found value is itself an array of multiple values, it will return the value of array key 0.
-     *
-     * @param string $key - the array path to return, i.e. /pages/content
+     * @param bool $isArrayReturnAllowed - can return array or first element of array
      * @param mixed $default - if the key is not found, this value will be returned
      * @return mixed|null
+     * @noinspection PhpMissingReturnTypeInspection
      */
-    public function getVal(string $key, $default = null) {
-        $array = $this->array;
+    private static function getValHelper(array $array, string $key, bool $isArrayReturnAllowed, $default) {
         if($key === '') {
             return $default;
         }
@@ -144,7 +56,7 @@ class XArray {
             } else {
                 return $default;
             }
-            if(is_array($array) && key($array) === 0) {
+            if(!$isArrayReturnAllowed && is_array($array) && key($array) === 0) {
                 $array = current($array);
             }
         }
@@ -152,7 +64,152 @@ class XArray {
     }
 
     /**
+     * Get string representation of value
+     *
+     * @param mixed $value
+     * @return string
+     */
+    private static function getStringValue($value) : string {
+        if($value === null) {
+            return '';
+        }
+        if(is_string($value)) {
+            return $value;
+        }
+        if(is_bool($value)) {
+            return $value ? 'true' : 'false';
+        }
+        if(is_array($value)) {
+            return implode(',', array_map(function($v) {
+                return self::getStringValue($v);
+            }, $value));
+        }
+        if($value instanceof Closure) {
+            return strval($value());
+        }
+        return strval($value);
+    }
+
+    /**
+     * @param array $array
+     * @param string $key
+     * @param mixed $value
+     * @return void
+     */
+    private static function setValHelper(array &$array, string $key, $value) : void {
+        $keys = explode('/', $key);
+        $count = count($keys);
+        $i = 0;
+        foreach($keys as $key) {
+            $i++;
+            if($i === $count) {
+                if($value === null) {
+                    unset($array[$key]);
+                    return;
+                }
+                $array[$key] = $value;
+            } else if(!isset($array[$key])) {
+                $array[$key] = [];
+            }
+            if(!is_array($array[$key]) ) {
+                if($i === $count) {
+
+                    // we're at a leaf path segment with no intention to replace the segment with a collection
+                    return;
+                }
+                $array[$key] = [];
+            }
+            $array = &$array[$key];
+        }
+    }
+
+    /**
+     * @var array
+     */
+    protected array $array = [];
+
+    /**
+     * Lazy initialized list of array keys is reset whenever array is mutated
+     *
+     * @var array|null
+     */
+    private ?array $keys = null;
+
+    /**
+     * @param array|null $array $array - array values to create XArray from. If not supplied, XArray will start empty
+     */
+    public function __construct(array $array = null) {
+        $this->array = $array !== null ? $array : [];
+    }
+
+    /**
+     * Find $key in the XArray, which is delimited by /, and ensure an array is returned
+     *
+     * If the found value is itself an array of multiple values, the array is returned
+     * If the found value is a single value, it is wrapped in an array then returned
+     *
+     * @param string $key - the array path to return, i.e. /pages/content
+     * @param array $default - if the key is not found, this array will be returned
+     * @return array
+     */
+    public function getAll(string $key = '', array $default = []) : array {
+        $array = $this->array;
+        if($key === '') {
+            return $array;
+        }
+        $keys = explode('/', $key);
+        $count = count($keys);
+        $i = 0;
+        foreach($keys as $val) {
+            $i++;
+            if($val === '') {
+                continue;
+            }
+            if(!isset($array[$val])) {
+                return $default;
+            }
+            if(!is_array($array[$val])) {
+                return [$array[$val]];
+            }
+            $array = $array[$val];
+            if($i === $count) {
+                if(key($array) !== 0) {
+                    $array = [$array];
+                }
+            }
+        }
+        return $array;
+    }
+
+    /**
+     * Retrieve all possible key paths in the array
+     *
+     * @return string[]
+     */
+    public function getKeys() : array {
+        if($this->keys === null) {
+            $this->keys = $this->getKeysHelper('', $this->array);
+        }
+        return $this->keys;
+    }
+
+    /**
      * Find $key in the XArray, which is delimited by /
+     *
+     * If the found value is itself an array of multiple values, it will return the array
+     *
+     * @param string $key - the array path to return, i.e. /pages/content
+     * @param mixed $default - if the key is not found, this value will be returned
+     * @return mixed|null
+     * @noinspection PhpMissingReturnTypeInspection
+     */
+    public function getVal(string $key, $default = null) {
+        return self::getValHelper($this->array, $key, true, $default);
+    }
+
+    /**
+     * Find $key in the XArray, which is delimited by /
+     *
      * If the found value is itself an array of multiple values, it will return the value of array key 0
      *
      * @param string $key - the array path to return, i.e. /pages/content
@@ -160,7 +217,7 @@ class XArray {
      * @return string - string representation of value
      */
     public function getString(string $key, string $default = '') : string {
-        return self::getStringValue($this->getVal($key, $default));
+        return self::getStringValue(self::getValHelper($this->array, $key, false, $default));
     }
 
     /**
@@ -172,6 +229,9 @@ class XArray {
      */
     public function setVal(string $key, $value = null) : void {
         $this->setValHelper($this->array, $key, $value);
+
+        // array has been mutated, reset key path cache
+        $this->keys = null;
     }
 
     /**
@@ -231,5 +291,52 @@ class XArray {
      *
      * @return array
      */
-    public function toArray() : array { return $this->array; }
+    public function toArray() : array {
+        return $this->array;
+    }
+
+    /**
+     * Returns a collection of mapped key paths to values
+     *
+     * @return array<string, mixed>
+     */
+    public function toFlattenedArray() : array {
+        $values = [];
+        foreach($this->getKeys() as $key) {
+            $value = $this->getVal($key);
+            if(is_array($value) && count(array_filter(array_keys($value), 'is_string')) > 0) {
+
+                // a collection that has string indices: it is safe assumption that it is key path segment
+                continue;
+            }
+            $values[$key] = $value;
+        }
+        return $values;
+    }
+
+    /**
+     * Internal helper to walk array recursively, building a list of xarray keys
+     *
+     * @param string $key
+     * @param array $array
+     * @return string[]
+     */
+    protected function getKeysHelper(string $key, array $array) : array {
+        $keys = [];
+        foreach($array as $k => $val) {
+            if(!is_string($k)) {
+
+                // keys are array path segments, it's safe to assume non-string keys are indexes for simple collections
+                continue;
+            }
+            if($key !== null && $key !== '') {
+                $k = "{$key}/{$k}";
+            }
+            $keys[] = $k;
+            if(is_array($val)) {
+                $keys = array_merge($keys, $this->getKeysHelper($k, $val));
+            }
+        }
+        return $keys;
+    }
 }

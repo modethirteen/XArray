@@ -18,7 +18,7 @@ namespace modethirteen\XArray\Tests\MutableXArray;
 
 use modethirteen\XArray\MutableXArray;
 
-class setVal_Test extends \modethirteen\XArray\Tests\XArrayBase\setVal_Test  {
+class getKeys_Test extends \modethirteen\XArray\Tests\XArrayBase\getKeys_Test  {
 
     /**
      * @var string
@@ -28,16 +28,26 @@ class setVal_Test extends \modethirteen\XArray\Tests\XArrayBase\setVal_Test  {
     /**
      * @test
      */
-    public function Can_mutate_original_array() : void {
-        
+    public function Can_get_keys_if_source_array_is_mutated() : void {
+
         // arrange
-        $array = ['foo' => ['bar' => 'baz']];
-        $x = new MutableXArray($array);
-        
+        $source = [
+            'foo' => [
+                'bar' => 'baz'
+            ]
+        ];
+        $x = new MutableXArray($source);
+
         // act
-        $x->setVal('qux', 'fred');
-        
+        $source['qux'] = ['plugh' => 'xyzzy'];
+        $result = $x->getKeys();
+
         // assert
-        $this->assertEquals(['foo' => ['bar' => 'baz'], 'qux' => 'fred'], $array);
+        static::assertEquals([
+            'foo',
+            'foo/bar',
+            'qux',
+            'qux/plugh'
+        ], $result);
     }
 }
