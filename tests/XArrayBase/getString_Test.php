@@ -138,6 +138,18 @@ abstract class getString_Test extends XArrayUnitTestCaseBase  {
                 ['foo' => 1.23],
                 'foo',
                 '1.23'
+            ],
+            'function' => [
+                ['foo' => function() {
+                    return 'qux';
+                }],
+                'foo',
+                'qux'
+            ],
+            'null' => [
+                ['foo' => null],
+                'foo',
+                ''
             ]
         ];
     }

@@ -106,6 +106,11 @@ abstract class getAll_Test extends XArrayUnitTestCaseBase  {
                 ['plugh' => ['xyzzy' => ['ogre' => [['foo', 'bar'], ['baz'], ['qux']]]]],
                 'plugh/xyzzy/ogre',
                 [['foo', 'bar'], ['baz'], ['qux']]
+            ],
+            'extra preceding key path segment' => [
+                ['foo' => ['bar' => 'baz']],
+                '/foo/bar',
+                ['baz']
             ]
         ];
     }

@@ -109,6 +109,11 @@ abstract class getVal_Test extends XArrayUnitTestCaseBase  {
                 ['plugh' => ['xyzzy' => ['ogre' => ['nivek' => [['foo', 'bar'], ['baz'], ['qux']]]]]],
                 'plugh/xyzzy/ogre',
                 ['nivek' => [['foo', 'bar'], ['baz'], ['qux']]]
+            ],
+            'extra preceding key path segment' => [
+                ['foo' => ['bar' => 'baz']],
+                '/foo/bar',
+                'baz'
             ]
         ];
     }
