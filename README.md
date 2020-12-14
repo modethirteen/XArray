@@ -54,7 +54,13 @@ $result = $x1->getVal('foo/bar'); // 'baz'
 $result = $x1->getVal('qux'); // 'fred'
 $results = $x1->getAll('qux'); // ['fred', 'quxx']
 
-// get the array
+// which key paths have been defined in the XArray?
+$keys = $x1->getKeys(); // ['foo', 'foo/bar', 'qux']
+
+// reduce output to the key paths that have values
+$flattened = $x1->toFlattenedArray(); // ['foo/bar' => 'baz', 'qux' => ['fred', 'quxx']]
+
+// get the array (the underlying array data structure)
 $array1 = $x1->toArray();
 
 // create a new XArray from the existing array
@@ -130,4 +136,92 @@ $array2 = $x->toArray();
 
 // MutableXArray mutates the source array
 assert($array1 === $array2);
+```
+
+### SchemaLockedArray.php (extends XArray.php)
+
+```php
+// SchemaLockedArray will block the setting of any values if the key path is not allowlisted in a schema
+$x = new SchemaLockedArray(new SchemaBuilder());
+
+// throws SchemaLockedArrayUndefinedKeyException
+$x->setVal('foo', 'bar');
+
+// a schema can be built with a fluent API
+$schemaBuilder = (new SchemaBuilder())
+    ->with('foo')
+
+    // also allowlists bar
+    ->with('bar/baz')
+
+    // also allowlists plugh and plugh/xyzzy
+    ->with('plugh/xyzzy/fred');
+
+// a schema can also be inferred from another XArray by analyzing the array's defined key paths
+$x = new XArray([
+    'foo' => 'qux',
+    'bar' => [
+        'baz' => true
+    ],
+    'plugh' => [
+        'xyzzy' => [
+            'fred' => [
+                'sodium',
+                'iodine'
+            ]
+        ]
+    ]
+]);
+$schemaBuilder = SchemaBuilder::newFromXArray($x);
+
+// either way, the SchemaLockedArray will only ever have the key paths that are defined in the schema
+$x = new SchemaLockedArray($schemaBuilder);
+
+// ...leading to a very predictable array tree structure when outputted
+$array = $x->toArray();
+```
+
+### JsonArray.php (extends XArray.php)
+
+```php
+// Like XArray, JsonArray can be built from a source array
+$array = [
+  'foo' => [
+      'bar',
+      'baz'
+  ]
+];
+$x = new JsonArray($array);
+
+// JsonArray can also be built from a JSON string
+$json = <<<JSON
+{
+  "several": [
+    "mental",
+    false,
+    -272603442,
+    [
+      "create",
+      true,
+      "knew",
+      true,
+      1946718342.0231495,
+      true
+    ],
+    true,
+    2140278260.1038685
+  ],
+  "while": false,
+  "excited": -1390968618.495607,
+  "method": false,
+  "truck": -1519363135.2899814,
+  "also": -927199622.0916243
+}
+JSON;
+$x = JsonArray::newFromJsonArrayFromJson($json);
+
+// JsonArray has options for serializing JSON output
+$json = $x->withUnescapedSlashes()
+    ->withPrettyPrint()
+    ->toJson();
 ```
