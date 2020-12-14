@@ -112,7 +112,7 @@ abstract class getString_Test extends XArrayUnitTestCaseBase  {
             ],
             'object with __toString' => [
                 ['foo' => new class {
-                    public function __toString() {
+                    public function __toString() : string {
                         return 'asdf';
                     }
                 }],

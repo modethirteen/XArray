@@ -212,7 +212,7 @@ abstract class toXml_Test extends XArrayUnitTestCaseBase  {
                 'p' => [
                     '@attr4' => 1.45,
                     '@attr5' => new class {
-                        public function __toString() {
+                        public function __toString() : string {
                             return 'zxcv';
                         }
                     },
