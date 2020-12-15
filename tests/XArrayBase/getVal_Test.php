@@ -14,63 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace modethirteen\XArray\tests\XArrayBase;
+namespace modethirteen\XArray\Tests\XArrayBase;
 
 abstract class getVal_Test extends XArrayUnitTestCaseBase  {
 
     /**
-     * @test
-     * @dataProvider source_xpath_expected_Provider
-     * @param array $source
-     * @param string $xpath
-     * @param mixed $expected
-     */
-    public function Can_get_value(array $source, string $xpath, $expected) {
-
-        // arrange
-        $x = $this->newXArray($source);
-
-        // act
-        $result = $x->getVal($xpath);
-
-        // assert
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * @test
-     */
-    public function Can_get_default() {
-
-        // arrange
-        $x = $this->newXArray(['foo' => 'bar']);
-
-        // act
-        $result = $x->getVal('qux', true);
-
-        // assert
-        $this->assertEquals(true, $result);
-    }
-
-    /**
-     * @test
-     */
-    public function Empty_key_returns_null() {
-
-        // arrange
-        $x = $this->newXArray(['foo' => 'bar']);
-
-        // act
-        $result = $x->getVal('');
-
-        // assert
-        $this->assertNull($result);
-    }
-    
-    /**
      * @return array
      */
-    public static function source_xpath_expected_Provider() : array {
+    public static function source_key_expected_Provider() : array {
         return [
             'empty level one' => [
                 [],
@@ -102,12 +53,12 @@ abstract class getVal_Test extends XArrayUnitTestCaseBase  {
                 'foo/bar/baz',
                 'qux',
             ],
-            
+
             // XArray::getVal(...) only gets first element of array value
             'array level one' => [
                 ['foo' => ['bar', 'baz']],
                 'foo',
-                'bar',
+                'bar'
             ],
             'array level two' => [
                 ['foo' => ['bar' => ['baz', 'qux']]],
@@ -118,7 +69,101 @@ abstract class getVal_Test extends XArrayUnitTestCaseBase  {
                 ['foo' => ['bar' => ['baz' => ['qux', 'fred']]]],
                 'foo/bar/baz',
                 'qux'
+            ],
+            'array of arrays level zero' => [
+                [['foo', 'bar'], ['baz'], ['qux']],
+                '',
+                null
+            ],
+            'array of arrays level one' => [
+                ['plugh' => [['foo', 'bar'], ['baz'], ['qux']]],
+                'plugh',
+                ['foo', 'bar']
+            ],
+            'array of arrays level two' => [
+                ['plugh' => ['xyzzy' => [['foo', 'bar'], ['baz'], ['qux']]]],
+                'plugh/xyzzy',
+                ['foo', 'bar']
+            ],
+            'array of arrays level three' => [
+                ['plugh' => ['xyzzy' => ['ogre' => [['foo', 'bar'], ['baz'], ['qux']]]]],
+                'plugh/xyzzy/ogre',
+                ['foo', 'bar']
+            ],
+            'array of arrays level four' => [
+                ['plugh' => ['xyzzy' => ['ogre' => ['nivek' => [['foo', 'bar'], ['baz'], ['qux']]]]]],
+                'plugh/xyzzy/ogre/nivek',
+                ['foo', 'bar']
+            ],
+            'array of arrays level two with level one key' => [
+                ['plugh' => ['xyzzy' => [['foo', 'bar'], ['baz'], ['qux']]]],
+                'plugh',
+                ['xyzzy' => [['foo', 'bar'], ['baz'], ['qux']]]
+            ],
+            'array of arrays level three with level two key' => [
+                ['plugh' => ['xyzzy' => ['ogre' => [['foo', 'bar'], ['baz'], ['qux']]]]],
+                'plugh/xyzzy',
+                ['ogre' => [['foo', 'bar'], ['baz'], ['qux']]]
+            ],
+            'array of arrays level four with level three key' => [
+                ['plugh' => ['xyzzy' => ['ogre' => ['nivek' => [['foo', 'bar'], ['baz'], ['qux']]]]]],
+                'plugh/xyzzy/ogre',
+                ['nivek' => [['foo', 'bar'], ['baz'], ['qux']]]
+            ],
+            'extra preceding key path segment' => [
+                ['foo' => ['bar' => 'baz']],
+                '/foo/bar',
+                'baz'
             ]
         ];
+    }
+
+    /**
+     * @test
+     * @dataProvider source_key_expected_Provider
+     * @param array $source
+     * @param string $key
+     * @param mixed $expected
+     */
+    public function Can_get_value(array $source, string $key, $expected) : void {
+
+        // arrange
+        $x = $this->newXArray($source);
+
+        // act
+        $result = $x->getVal($key);
+
+        // assert
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function Can_get_default() : void {
+
+        // arrange
+        $x = $this->newXArray(['foo' => 'bar']);
+
+        // act
+        $result = $x->getVal('qux', true);
+
+        // assert
+        $this->assertEquals(true, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function Empty_key_returns_null() : void {
+
+        // arrange
+        $x = $this->newXArray(['foo' => 'bar']);
+
+        // act
+        $result = $x->getVal('');
+
+        // assert
+        $this->assertNull($result);
     }
 }

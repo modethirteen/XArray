@@ -14,14 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace modethirteen\XArray\Tests\XArray;
+namespace modethirteen\XArray\Tests\JsonArray;
 
-use modethirteen\XArray\XArray;
+use modethirteen\XArray\JsonArray;
+use PHPUnit\Framework\TestCase;
 
-class getString_Test extends \modethirteen\XArray\Tests\XArrayBase\getString_Test  {
+class __ctor_Test extends TestCase {
 
     /**
-     * @var string
+     * @test
      */
-    protected static $class = XArray::class;
+    public function Constructor_does_not_hold_reference_to_source_array() : void {
+        
+        // arrange
+        $source = ['foo' => 'bar'];
+        
+        // act
+        $x = new JsonArray($source);
+        $x->setVal('foo', 'baz');
+        
+        // assert
+        $this->assertNotSame($source, $x->toArray());
+    }
 }

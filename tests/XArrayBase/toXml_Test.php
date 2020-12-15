@@ -14,14 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace modethirteen\XArray\tests\XArrayBase;
+namespace modethirteen\XArray\Tests\XArrayBase;
+
+use modethirteen\XArray\SchemaLockedArray;
 
 abstract class toXml_Test extends XArrayUnitTestCaseBase  {
 
     /**
      * @test
      */
-    public function Simple_array_with_attributes_and_text() {
+    public function Simple_array_with_attributes_and_text() : void {
 
         // arrange
         $source = ['p' => ['@attr1' => 'val1', '@attr2' => 'val2', '#text' => 'text']];
@@ -37,7 +39,7 @@ abstract class toXml_Test extends XArrayUnitTestCaseBase  {
     /**
      * @test
      */
-    public function Nested_array_with_attributes_and_text() {
+    public function Nested_array_with_attributes_and_text() : void {
 
         // arrange
         $source = [
@@ -64,7 +66,7 @@ abstract class toXml_Test extends XArrayUnitTestCaseBase  {
     /**
      * @test
      */
-    public function Nested_array_with_attributes_and_text_and_outer_xml() {
+    public function Nested_array_with_attributes_and_text_and_outer_xml() : void {
         
         // arrange
         $source = [
@@ -93,7 +95,7 @@ abstract class toXml_Test extends XArrayUnitTestCaseBase  {
      *
      * @test
      */
-    public function Attributes_with_special_characters_are_encoded() {
+    public function Attributes_with_special_characters_are_encoded() : void {
 
         // arrange
         $source = ['p' => ['@attr1"&\'<>' => 'val1', '#text' => 'text']];
@@ -111,7 +113,7 @@ abstract class toXml_Test extends XArrayUnitTestCaseBase  {
      *
      * @test
      */
-    public function Attribute_values_with_special_characters_are_encoded() {
+    public function Attribute_values_with_special_characters_are_encoded() : void {
 
         // arrange
         $source = ['p' => ['@attr1' => 'val1"&\'<>', '#text' => 'text']];
@@ -129,7 +131,7 @@ abstract class toXml_Test extends XArrayUnitTestCaseBase  {
      *
      * @test
      */
-    public function Text_with_special_characters_are_encoded() {
+    public function Text_with_special_characters_are_encoded() : void {
 
         // arrange
         $source = ['p' => ['#text' => 'text"&\'<>']];
@@ -147,7 +149,7 @@ abstract class toXml_Test extends XArrayUnitTestCaseBase  {
      *
      * @test
      */
-    public function Xml_tags_with_special_characters_are_encoded() {
+    public function Xml_tags_with_special_characters_are_encoded() : void {
 
         // arrange
         $source = ['p"&\'<>' => ['#text' => 'text']];
@@ -165,7 +167,7 @@ abstract class toXml_Test extends XArrayUnitTestCaseBase  {
      *
      * @test
      */
-    public function Xml_values_with_special_characters_are_encoded() {
+    public function Xml_values_with_special_characters_are_encoded() : void {
 
         // arrange
         $source = ['p' => 'val"&\'<>'];
@@ -181,7 +183,7 @@ abstract class toXml_Test extends XArrayUnitTestCaseBase  {
     /**
      * @test
      */
-    public function Can_handle_numeric_arrays() {
+    public function Can_handle_numeric_arrays() : void {
     
         // arrange
         $source = ['foo' => [
@@ -199,7 +201,7 @@ abstract class toXml_Test extends XArrayUnitTestCaseBase  {
     /**
      * @test
      */
-    public function Can_handle_non_string_types() {
+    public function Can_handle_non_string_types() : void {
 
           // arrange
         $source = [
@@ -210,7 +212,7 @@ abstract class toXml_Test extends XArrayUnitTestCaseBase  {
                 'p' => [
                     '@attr4' => 1.45,
                     '@attr5' => new class {
-                        public function __toString() {
+                        public function __toString() : string {
                             return 'zxcv';
                         }
                     },
@@ -227,6 +229,12 @@ abstract class toXml_Test extends XArrayUnitTestCaseBase  {
         $xml = $x->toXml();
 
         // assert
-        $this->assertEquals('<div attr1="true" attr2="123">text<p attr4="1.45" attr5="zxcv">text2</p><541>foo</541></div>', $xml, 'XML output was incorrect');
+        if(static::$class === SchemaLockedArray::class) {
+
+            // schema can not allowlist an integer as a segment of a key path
+            $this->assertEquals('<div attr1="true" attr2="123">text<p attr4="1.45" attr5="zxcv">text2</p></div>', $xml, 'XML output was incorrect');
+        } else {
+            $this->assertEquals('<div attr1="true" attr2="123">text<p attr4="1.45" attr5="zxcv">text2</p><541>foo</541></div>', $xml, 'XML output was incorrect');
+        }
     }
 }

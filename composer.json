@@ -10,16 +10,16 @@
       "role": "maintainer"
     }
   ],
-  "minimum-stability": "dev",
   "support": {
     "issues": "https://github.com/modethirteen/XArray.php/issues"
   },
   "require": {
-    "php": ">=7.2.0"
+    "php": ">=7.2.0",
+    "ext-json": "*"
   },
   "require-dev": {
-    "phpstan/phpstan": "0.11.1",
-    "phpunit/phpunit": "7.4.3"
+    "phpstan/phpstan": "~0.12",
+    "phpunit/phpunit": "~7.4.3"
   },
   "autoload": {
     "psr-4": {
@@ -29,7 +29,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "modethirteen\\XArray\\tests\\": ["tests/"]
+      "modethirteen\\XArray\\Tests\\": ["tests/"]
     }
   }
 }

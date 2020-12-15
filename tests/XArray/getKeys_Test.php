@@ -18,7 +18,7 @@ namespace modethirteen\XArray\Tests\XArray;
 
 use modethirteen\XArray\XArray;
 
-class getString_Test extends \modethirteen\XArray\Tests\XArrayBase\getString_Test  {
+class getKeys_Test extends \modethirteen\XArray\Tests\XArrayBase\getKeys_Test  {
 
     /**
      * @var string

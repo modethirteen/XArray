@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace modethirteen\XArray\tests\MutableXArray;
+namespace modethirteen\XArray\Tests\MutableXArray;
 
 use modethirteen\XArray\MutableXArray;
 use PHPUnit\Framework\TestCase;
@@ -24,7 +24,7 @@ class __ctor_Test extends TestCase {
     /**
      * @test
      */
-    public function Constructor_holds_reference_to_source_array() {
+    public function Constructor_holds_reference_to_source_array() : void {
         
         // arrange
         $source = ['foo' => 'bar'];
@@ -35,20 +35,5 @@ class __ctor_Test extends TestCase {
         
         // assert
         $this->assertSame($source, $x->toArray());
-    }
-
-    /**
-     * @test
-     */
-    public function Can_construct_compatibility_class() {
-
-        // arrange
-        $source = ['foo' => 'bar'];
-
-        // act
-        $x = new \MindTouch\XArray\MutableXArray($source);
-
-        // assert
-        $this->assertTrue(is_subclass_of($x, MutableXArray::class));
     }
 }

@@ -18,7 +18,7 @@ namespace modethirteen\XArray\Tests\XArrayBase;
 
 use modethirteen\XArray\SchemaBuilder;
 
-abstract class toArray_Test extends XArrayUnitTestCaseBase  {
+abstract class toFlattenedArray_Test extends XArrayUnitTestCaseBase  {
 
     /**
      * @test
@@ -30,10 +30,10 @@ abstract class toArray_Test extends XArrayUnitTestCaseBase  {
         $x->setVal('foo/bar', 'baz');
         
         // act
-        $result = $x->toArray();
+        $result = $x->toFlattenedArray();
         
         // assert
-        $this->assertEquals(['foo' => ['bar' => 'baz']], $result);
+        $this->assertEquals(['foo/bar' => 'baz'], $result);
     }
     
     /**
@@ -46,10 +46,10 @@ abstract class toArray_Test extends XArrayUnitTestCaseBase  {
         $x = $this->newXArray($array);
         
         // act
-        $result = $x->toArray();
+        $result = $x->toFlattenedArray();
         
         // assert
-        $this->assertEquals(['foo' => ['bar' => 'baz']], $result);
+        $this->assertEquals(['foo/bar' => 'baz'], $result);
     }
 
     /**
@@ -58,17 +58,34 @@ abstract class toArray_Test extends XArrayUnitTestCaseBase  {
     public function Can_return_modified_array_created_from_array() : void {
         
         // arrange
-        $array = ['foo' => ['bar' => 'baz']];
+        $array = [
+            'foo' => ['bar' => 'baz'],
+            541 => ['attr' => '#text']
+        ];
         $x = $this->newXArray($array, (new SchemaBuilder())
             ->with('foo/bar')
             ->with('qux/fred')
+            ->with('a/b/c/d/e')
+            ->with('a/b/f/g')
+            ->with('qux/plugh')
+            ->with('bazz/foo/foobar/fred')
         );
         $x->setVal('qux', 'fred');
+        $x->setVal('a/b/c/d/e', true);
+        $x->setVal('a/b/f/g', false);
+        $x->setVal('qux/plugh', 'xyzzy');
+        $x->setVal('bazz/foo/foobar/fred', ['sodium', 'argon', 'iodine']);
         
         // act
-        $result = $x->toArray();
+        $result = $x->toFlattenedArray();
         
         // assert
-        $this->assertEquals(['foo' => ['bar' => 'baz'], 'qux' => 'fred'], $result);
+        $this->assertEquals([
+            'foo/bar' => 'baz',
+            'qux/plugh' => 'xyzzy',
+            'a/b/c/d/e' => true,
+            'a/b/f/g' => false,
+            'bazz/foo/foobar/fred' => ['sodium', 'argon', 'iodine']
+        ], $result);
     }
 }

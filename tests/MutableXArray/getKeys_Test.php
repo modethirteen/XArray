@@ -18,10 +18,36 @@ namespace modethirteen\XArray\Tests\MutableXArray;
 
 use modethirteen\XArray\MutableXArray;
 
-class getString_Test extends \modethirteen\XArray\Tests\XArrayBase\getString_Test  {
+class getKeys_Test extends \modethirteen\XArray\Tests\XArrayBase\getKeys_Test  {
 
     /**
      * @var string
      */
     protected static $class = MutableXArray::class;
+
+    /**
+     * @test
+     */
+    public function Can_get_keys_if_source_array_is_mutated() : void {
+
+        // arrange
+        $source = [
+            'foo' => [
+                'bar' => 'baz'
+            ]
+        ];
+        $x = new MutableXArray($source);
+
+        // act
+        $source['qux'] = ['plugh' => 'xyzzy'];
+        $result = $x->getKeys();
+
+        // assert
+        static::assertEquals([
+            'foo',
+            'foo/bar',
+            'qux',
+            'qux/plugh'
+        ], $result);
+    }
 }

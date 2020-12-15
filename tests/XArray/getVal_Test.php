@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace modethirteen\XArray\tests\XArray;
+namespace modethirteen\XArray\Tests\XArray;
 
 use modethirteen\XArray\XArray;
 
-class getVal_Test extends \modethirteen\XArray\tests\XArrayBase\getVal_Test  {
+class getVal_Test extends \modethirteen\XArray\Tests\XArrayBase\getVal_Test  {
 
     /**
      * @var string

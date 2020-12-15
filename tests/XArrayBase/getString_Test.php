@@ -14,63 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace modethirteen\XArray\tests\XArrayBase;
+namespace modethirteen\XArray\Tests\XArrayBase;
 
 abstract class getString_Test extends XArrayUnitTestCaseBase  {
 
     /**
-     * @test
-     * @dataProvider source_xpath_expected_Provider
-     * @param array $source
-     * @param string $xpath
-     * @param string $expected
-     */
-    public function Can_get_string_value(array $source, string $xpath, $expected) {
-
-        // arrange
-        $x = $this->newXArray($source);
-
-        // act
-        $result = $x->getString($xpath);
-
-        // assert
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
-     * @test
-     */
-    public function Can_get_default() {
-
-        // arrange
-        $x = $this->newXArray(['foo' => 'bar']);
-
-        // act
-        $result = $x->getString('qux', 'fred');
-
-        // assert
-        $this->assertEquals('fred', $result);
-    }
-
-    /**
-     * @test
-     */
-    public function Empty_key_returns_empty_string() {
-
-        // arrange
-        $x = $this->newXArray(['foo' => 'bar']);
-
-        // act
-        $result = $x->getString('');
-
-        // assert
-        $this->assertEquals('', $result);
-    }
-    
-    /**
      * @return array
      */
-    public static function source_xpath_expected_Provider() : array {
+    public static function source_key_expected_Provider() : array {
         return [
             'empty level one' => [
                 [],
@@ -102,7 +53,7 @@ abstract class getString_Test extends XArrayUnitTestCaseBase  {
                 'foo/bar/baz',
                 'qux',
             ],
-            
+
             // XArray::getVal(...) only gets first element of array value
             'array level one' => [
                 ['foo' => ['bar', 'baz']],
@@ -119,9 +70,49 @@ abstract class getString_Test extends XArrayUnitTestCaseBase  {
                 'foo/bar/baz',
                 'qux'
             ],
+            'array of arrays level zero' => [
+                [['foo', 'bar'], ['baz'], ['qux']],
+                '',
+                ''
+            ],
+            'array of arrays level one' => [
+                ['plugh' => [['foo', 'bar'], ['baz'], ['qux']]],
+                'plugh',
+                'foo,bar'
+            ],
+            'array of arrays level two' => [
+                ['plugh' => ['xyzzy' => [['foo', 'bar'], ['baz'], ['qux']]]],
+                'plugh/xyzzy',
+                'foo,bar'
+            ],
+            'array of arrays level three' => [
+                ['plugh' => ['xyzzy' => ['ogre' => [['foo', 'bar'], ['baz'], ['qux']]]]],
+                'plugh/xyzzy/ogre',
+                'foo,bar'
+            ],
+            'array of arrays level four' => [
+                ['plugh' => ['xyzzy' => ['ogre' => ['nivek' => [['foo', 'bar'], ['baz'], ['qux']]]]]],
+                'plugh/xyzzy/ogre/nivek',
+                'foo,bar'
+            ],
+            'array of arrays level two with level one key' => [
+                ['plugh' => ['xyzzy' => [['foo', 'bar'], ['baz'], ['qux']]]],
+                'plugh',
+                'foo,bar,baz,qux'
+            ],
+            'array of arrays level three with level two key' => [
+                ['plugh' => ['xyzzy' => ['ogre' => [['foo', 'bar'], ['baz'], ['qux']]]]],
+                'plugh/xyzzy',
+                'foo,bar,baz,qux'
+            ],
+            'array of arrays level four with level three key' => [
+                ['plugh' => ['xyzzy' => ['ogre' => ['nivek' => [['foo', 'bar'], ['baz'], ['qux']]]]]],
+                'plugh/xyzzy/ogre',
+                'foo,bar,baz,qux'
+            ],
             'object with __toString' => [
                 ['foo' => new class {
-                    public function __toString() {
+                    public function __toString() : string {
                         return 'asdf';
                     }
                 }],
@@ -147,7 +138,68 @@ abstract class getString_Test extends XArrayUnitTestCaseBase  {
                 ['foo' => 1.23],
                 'foo',
                 '1.23'
+            ],
+            'function' => [
+                ['foo' => function() {
+                    return 'qux';
+                }],
+                'foo',
+                'qux'
+            ],
+            'null' => [
+                ['foo' => null],
+                'foo',
+                ''
             ]
         ];
+    }
+
+    /**
+     * @test
+     * @dataProvider source_key_expected_Provider
+     * @param array $source
+     * @param string $key
+     * @param string $expected
+     */
+    public function Can_get_string_value(array $source, string $key, string $expected) : void {
+
+        // arrange
+        $x = $this->newXArray($source);
+
+        // act
+        $result = $x->getString($key);
+
+        // assert
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function Can_get_default() : void {
+
+        // arrange
+        $x = $this->newXArray(['foo' => 'bar']);
+
+        // act
+        $result = $x->getString('qux', 'fred');
+
+        // assert
+        $this->assertEquals('fred', $result);
+    }
+
+    /**
+     * @test
+     */
+    public function Empty_key_returns_empty_string() : void {
+
+        // arrange
+        $x = $this->newXArray(['foo' => 'bar']);
+
+        // act
+        $result = $x->getString('');
+
+        // assert
+        $this->assertEquals('', $result);
     }
 }

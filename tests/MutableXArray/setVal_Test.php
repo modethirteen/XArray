@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace modethirteen\XArray\tests\MutableXArray;
+namespace modethirteen\XArray\Tests\MutableXArray;
 
 use modethirteen\XArray\MutableXArray;
 
-class setVal_Test extends \modethirteen\XArray\tests\XArrayBase\setVal_Test  {
+class setVal_Test extends \modethirteen\XArray\Tests\XArrayBase\setVal_Test  {
 
     /**
      * @var string
@@ -28,14 +28,14 @@ class setVal_Test extends \modethirteen\XArray\tests\XArrayBase\setVal_Test  {
     /**
      * @test
      */
-    public function Can_mutate_original_array() {
+    public function Can_mutate_original_array() : void {
         
         // arrange
         $array = ['foo' => ['bar' => 'baz']];
-        $X = new MutableXArray($array);
+        $x = new MutableXArray($array);
         
         // act
-        $X->setVal('qux', 'fred');
+        $x->setVal('qux', 'fred');
         
         // assert
         $this->assertEquals(['foo' => ['bar' => 'baz'], 'qux' => 'fred'], $array);

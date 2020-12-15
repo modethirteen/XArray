@@ -14,34 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace modethirteen\XArray\tests\XArrayBase;
+namespace modethirteen\XArray\Tests\XArrayBase;
 
 abstract class setVal_Test extends XArrayUnitTestCaseBase {
 
     /**
-     * @test
-     * @dataProvider source_xpath_value_expected_Provider
-     * @param array $source
-     * @param string $xpath
-     * @param mixed $value
-     * @param array $expected
-     */
-    public function Can_set_value(array $source, string $xpath, $value, array $expected) {
-
-        // arrange
-        $x = $this->newXArray($source);
-
-        // act
-        $x->setVal($xpath, $value);
-
-        // assert
-        $this->assertEquals($expected, $x->toArray());
-    }
-
-    /**
      * @return array
      */
-    public static function source_xpath_value_expected_Provider() : array {
+    public static function source_key_value_expected_Provider() : array {
         return [
             'empty with string level one' => [
                 [],
@@ -78,6 +58,42 @@ abstract class setVal_Test extends XArrayUnitTestCaseBase {
                 'foo/bar/baz',
                 ['qux', 'fred'],
                 ['foo' => ['bar' => ['baz' => ['qux', 'fred']]]]
+            ],
+            'empty with bool level one' => [
+                [],
+                'foo',
+                true,
+                ['foo' => true]
+            ],
+            'empty with bool level two' => [
+                [],
+                'foo/bar',
+                true,
+                ['foo' => ['bar' => true]]
+            ],
+            'empty with bool level three' => [
+                [],
+                'foo/bar/baz',
+                true,
+                ['foo' => ['bar' => ['baz' => true]]]
+            ],
+            'empty with int level one' => [
+                [],
+                'foo',
+                123,
+                ['foo' => 123]
+            ],
+            'empty with int level two' => [
+                [],
+                'foo/bar',
+                123,
+                ['foo' => ['bar' => 123]]
+            ],
+            'empty with int level three' => [
+                [],
+                'foo/bar/baz',
+                123,
+                ['foo' => ['bar' => ['baz' => 123]]]
             ],
             'string with string level one' => [
                 ['foo' => 'bar'],
@@ -186,7 +202,45 @@ abstract class setVal_Test extends XArrayUnitTestCaseBase {
                 'foo/bar/baz',
                 ['apple', 'pear'],
                 ['foo' => ['bar' => ['baz' => ['apple', 'pear']]]]
+            ],
+            'replace leaf bool with key' => [
+                ['foo' => true],
+                'foo/bar',
+                'qux',
+                ['foo' => ['bar' => 'qux']]
+            ],
+            'replace leaf string with key' => [
+                ['foo' => 'bar'],
+                'foo/bar',
+                'qux',
+                ['foo' => ['bar' => 'qux']]
+            ],
+            'replace leaf int with key' => [
+                ['foo' => 'bar'],
+                'foo/bar',
+                'qux',
+                ['foo' => ['bar' => 'qux']]
             ]
         ];
+    }
+
+    /**
+     * @test
+     * @dataProvider source_key_value_expected_Provider
+     * @param array $source
+     * @param string $key
+     * @param mixed $value
+     * @param array $expected
+     */
+    public function Can_set_value(array $source, string $key, $value, array $expected) : void {
+
+        // arrange
+        $x = $this->newXArray($source);
+
+        // act
+        $x->setVal($key, $value);
+
+        // assert
+        $this->assertEquals($expected, $x->toArray());
     }
 }

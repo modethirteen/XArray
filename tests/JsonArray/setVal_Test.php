@@ -14,14 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace modethirteen\XArray\Tests\XArray;
+namespace modethirteen\XArray\Tests\JsonArray;
 
-use modethirteen\XArray\XArray;
+use modethirteen\XArray\JsonArray;
 
-class getString_Test extends \modethirteen\XArray\Tests\XArrayBase\getString_Test  {
+class setVal_Test extends \modethirteen\XArray\Tests\XArrayBase\setVal_Test  {
 
     /**
      * @var string
      */
-    protected static $class = XArray::class;
+    protected static $class = JsonArray::class;
+
+    /**
+     * @test
+     */
+    public function Cannot_mutate_original_array() : void {
+        
+        // arrange
+        $array = ['foo' => ['bar' => 'baz']];
+        $x = new JsonArray($array);
+        
+        // act
+        $x->setVal('qux', 'fred');
+        
+        // assert
+        $this->assertEquals(['foo' => ['bar' => 'baz']], $array);
+    }
 }

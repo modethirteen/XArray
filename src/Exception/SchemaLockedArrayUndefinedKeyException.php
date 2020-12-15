@@ -14,14 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace modethirteen\XArray\Tests\XArray;
+namespace modethirteen\XArray\Exception;
 
-use modethirteen\XArray\XArray;
+use Exception;
 
-class getString_Test extends \modethirteen\XArray\Tests\XArrayBase\getString_Test  {
+class SchemaLockedArrayUndefinedKeyException extends Exception {
 
     /**
-     * @var string
+     * @param string $key
      */
-    protected static $class = XArray::class;
+    public function __construct(string $key) {
+        parent::__construct('Could not set array key not defined in schema: ' . $key);
+    }
 }
+
