@@ -9,8 +9,7 @@ A utility for traversing PHP arrays with an XPath-like syntax.
 
 ## Requirements
 
-* PHP 5.4, 5.5, 5.6 (0.1.x)
-* PHP 7.2, 7.3 (php72, 1.x)
+* PHP 7.2+ (1.x)
 * PHP 7.4+ (main, 2.x)
 
 ## Installation
@@ -51,8 +50,7 @@ $x1->setVal('qux', ['fred', 'quxx']);
 
 // get some values
 $result = $x1->getVal('foo/bar'); // 'baz'
-$result = $x1->getVal('qux'); // 'fred'
-$results = $x1->getAll('qux'); // ['fred', 'quxx']
+$result = $x1->getVal('qux'); // ['fred', 'quxx']
 
 // which key paths have been defined in the XArray?
 $keys = $x1->getKeys(); // ['foo', 'foo/bar', 'qux']
@@ -71,15 +69,14 @@ $x2->setVal('foo/bar', ['qux', 'baz']);
 $x2->setVal('bar', 'foo');
 
 // get some values
-$result = $x2->getVal('foo/bar'); // 'qux'
-$result = $x2->getAll('bar'); // ['foo']
-$results = $x2->getAll('qux'); // ['fred', 'quxx']
+$result = $x2->getVal('foo/bar'); // ['qux', 'baz']
+$result = $x2->getVal('bar'); // 'foo'
 
 // we can get a value strictly as a string, if we are in strict typing mode!
 // first we set some non-string values...
 $x2->setVal('qwerty', true);
 $x2->setVal('asdf', new class {
-    public function __toString() {
+    public function __toString() : string {
         return 'zxcv';
     }
 });

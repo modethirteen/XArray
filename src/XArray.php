@@ -143,45 +143,6 @@ class XArray {
     }
 
     /**
-     * Find $key in the XArray, which is delimited by /, and ensure an array is returned
-     *
-     * If the found value is itself an array of multiple values, the array is returned
-     * If the found value is a single value, it is wrapped in an array then returned
-     *
-     * @param string $key - the array path to return, i.e. /pages/content
-     * @param array $default - if the key is not found, this array will be returned
-     * @return array
-     */
-    public function getAll(string $key = '', array $default = []) : array {
-        $array = $this->array;
-        if($key === '') {
-            return $array;
-        }
-        $keys = explode('/', $key);
-        $count = count($keys);
-        $i = 0;
-        foreach($keys as $val) {
-            $i++;
-            if($val === '') {
-                continue;
-            }
-            if(!isset($array[$val])) {
-                return $default;
-            }
-            if(!is_array($array[$val])) {
-                return [$array[$val]];
-            }
-            $array = $array[$val];
-            if($i === $count) {
-                if(key($array) !== 0) {
-                    $array = [$array];
-                }
-            }
-        }
-        return $array;
-    }
-
-    /**
      * Retrieve all possible key paths in the array
      *
      * @return string[]
