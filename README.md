@@ -36,9 +36,9 @@ Or add modethirteen/xarray to your project's composer.json:
 
 Assuming you have setup Composer's autoloader, XArray can be found in the `modethirteen\XArray\` namespace.
 
-## Usage
+## Types
 
-### XArray.php
+### XArray
 
 ```php
 // use XArray from scratch
@@ -95,7 +95,7 @@ $array2 = $x2->toArray();
 assert($array1 !== $array2);
 ```
 
-### MutableXArray.php (extends XArray.php)
+### MutableXArray (extends XArray)
 
 ```php
 // MutableXArray always requires a source array
@@ -118,7 +118,7 @@ $array2 = $x->toArray();
 assert($array1 === $array2);
 ```
 
-### SchemaLockedArray.php (extends XArray.php)
+### SchemaLockedArray (extends XArray)
 
 ```php
 // SchemaLockedArray will block the setting of any values if the key path is not allowlisted in a schema
@@ -161,7 +161,7 @@ $x = new SchemaLockedArray($schemaBuilder);
 $array = $x->toArray();
 ```
 
-### Serialization
+## Serialization
 
 ```php
 // An XArray (or any derived instance) can have a specialized serializer attached when writing the array into a textual representation is necessary, such as JSON...
