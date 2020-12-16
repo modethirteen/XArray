@@ -9,8 +9,8 @@ A utility for traversing PHP arrays with an XPath-like syntax.
 
 ## Requirements
 
-* PHP 7.2+ (1.x)
-* PHP 7.4+ (main, 2.x)
+* PHP 7.2, 7.3, 7.4 (1.x)
+* PHP 7.4 (main, 2.x)
 
 ## Installation
 
