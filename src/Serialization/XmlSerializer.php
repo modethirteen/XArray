@@ -28,11 +28,19 @@ class XmlSerializer implements ISerializer {
     private ?string $root = null;
 
     public function serialize(IArray $array): string {
+        $rootElements = array_filter($array->getKeys(), function(string $key) : bool {
+            return !(new StringEx($key))->contains('/');
+        });
+        if(count($rootElements) > 1 && $this->root !== null) {
+
+            // there are multiple root documents, wrap them all with our root element
+            return "<{$this->root}>{$this->toXml($array)}</{$this->root}>";
+        }
         return $this->toXml($array, $this->root);
     }
 
     /**
-     * Add a tag to wrap the entire XML document (the root document element)
+     * Add or replace root element surrounding top-level elements in the array
      *
      * @note this tag is useful for serializing valid XML if the array has no root element itself
      * @param string $tag

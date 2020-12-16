@@ -21,6 +21,7 @@ namespace modethirteen\XArray\Tests\Serialization\XmlSerializer;
 use modethirteen\XArray\SchemaLockedArray;
 use modethirteen\XArray\Serialization\XmlSerializer;
 use modethirteen\XArray\Tests\Serialization\SerializerUnitTestCaseBase;
+use modethirteen\XArray\XArray;
 
 class serialize_Test extends SerializerUnitTestCaseBase  {
 
@@ -86,7 +87,7 @@ class serialize_Test extends SerializerUnitTestCaseBase  {
      * @param string $class
      * @test
      */
-    public function Nested_array_with_attributes_and_text_and_outer_xml(string $class) : void {
+    public function Nested_array_with_root_element_and_attributes_and_text_and_supplied_root_element(string $class) : void {
 
         // arrange
         $source = [
@@ -113,6 +114,45 @@ class serialize_Test extends SerializerUnitTestCaseBase  {
         // assert
         static::assertEquals('<mindtouch attr1="val1" attr2="val2">text<p attr4="val4" attr5="val5">text2</p></mindtouch>', $result1, 'XML output was incorrect');
         static::assertEquals('<mindtouch attr1="val1" attr2="val2">text<p attr4="val4" attr5="val5">text2</p></mindtouch>', $result2, 'XML output was incorrect');
+        static::assertEquals($result1, $result2);
+    }
+
+    /**
+     * @dataProvider class_Provider
+     * @param string $class
+     * @test
+     */
+    public function Nested_array_with_no_root_element_with_supplied_root_element(string $class) : void {
+
+        // arrange
+        $source = [
+            'foo' => [
+                'bar' => [
+                    'qux',
+                    'baz'
+                ]
+            ],
+            'qux' => [
+                'fred',
+                'quxxx'
+            ],
+            'bar' => 'foo',
+            'querty' => true,
+            'asdf' => 'zxcv'
+        ];
+
+        $x = self::newArrayFromClass($class, $source);
+        $serializer = (new XmlSerializer())
+            ->withRootElement('xyzzy');
+
+        // act
+        $result1 = $serializer->serialize($x);
+        $x = $x->withSerializer($serializer);
+        $result2 = $x->toString();
+
+        // assert
+        static::assertEquals('<xyzzy><foo><bar>qux</bar><bar>baz</bar></foo><qux>fred</qux><qux>quxxx</qux><bar>foo</bar><querty>true</querty><asdf>zxcv</asdf></xyzzy>', $result1, 'XML output was incorrect');
+        static::assertEquals('<xyzzy><foo><bar>qux</bar><bar>baz</bar></foo><qux>fred</qux><qux>quxxx</qux><bar>foo</bar><querty>true</querty><asdf>zxcv</asdf></xyzzy>', $result2, 'XML output was incorrect');
         static::assertEquals($result1, $result2);
     }
 
@@ -249,9 +289,11 @@ class serialize_Test extends SerializerUnitTestCaseBase  {
     public function Can_handle_numeric_arrays(string $class) : void {
 
         // arrange
-        $source = ['foo' => [
-            'bar', 'baz', 'qux'
-        ]];
+        $source = [
+            'foo' => [
+                'bar', 'baz', 'qux'
+            ]
+        ];
         $x = self::newArrayFromClass($class, $source);
         $serializer = new XmlSerializer();
 

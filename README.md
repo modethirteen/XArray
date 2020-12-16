@@ -93,23 +93,6 @@ $array2 = $x2->toArray();
 
 // XArray does not mutate the source array
 assert($array1 !== $array2);
-
-// get an XML representation of the array
-$xml = $x2->toXml('xyzzy');
-```
-
-```xml
-<xyzzy>
-    <foo>
-        <bar>qux</bar>
-        <bar>baz</bar>
-    </foo>
-    <qux>fred</qux>
-    <qux>quxx</qux>
-    <bar>foo</bar>
-    <querty>true</querty>
-    <asdf>zxcv</asdf>
-</xyzzy>
 ```
 
 ### MutableXArray.php (extends XArray.php)
@@ -178,47 +161,71 @@ $x = new SchemaLockedArray($schemaBuilder);
 $array = $x->toArray();
 ```
 
-### JsonArray.php (extends XArray.php)
+### Serialization
 
 ```php
-// Like XArray, JsonArray can be built from a source array
-$array = [
-  'foo' => [
-      'bar',
-      'baz'
-  ]
-];
-$x = new JsonArray($array);
-
-// JsonArray can also be built from a JSON string
-$json = <<<JSON
-{
-  "several": [
-    "mental",
-    false,
-    -272603442,
-    [
-      "create",
-      true,
-      "knew",
-      true,
-      1946718342.0231495,
-      true
+// An XArray (or any derived instance) can have a specialized serializer attached when writing the array into a textual representation is necessary, such as JSON...
+$x = (new XArray([
+    'foo' => [
+        'bar' => [
+            "//baz",
+            'qux'
+        ]
     ],
-    true,
-    2140278260.1038685
-  ],
-  "while": false,
-  "excited": -1390968618.495607,
-  "method": false,
-  "truck": -1519363135.2899814,
-  "also": -927199622.0916243
-}
-JSON;
-$x = JsonArray::newFromJsonArrayFromJson($json);
+    'plugh' => 'xyzzy'
+]))->with(
+    (new JsonSerializer())
+        ->withUnescapedSlashes()
+        ->withPrettyPrint()
+);
+$x->toString();
+```
 
-// JsonArray has options for serializing JSON output
-$json = $x->withUnescapedSlashes()
-    ->withPrettyPrint()
-    ->toJson();
+```json
+{
+    "foo": {
+        "bar": [
+            "//baz",
+            "qux"
+        ]
+    },
+    "plugh": "xyzzy"
+}
+```
+
+```php
+// ...or XML
+$x = (new XArray([
+    'foo' => [
+        'bar' => [
+            'qux',
+            'baz'
+        ]
+    ],
+    'qux' => [
+        'fred',
+        'quxxx'
+    ],
+    'bar' => 'foo',
+    'querty' => true,
+    'asdf' => 'zxcv'
+]))->with(
+    (new XmlSerializer())
+        ->withRootElement('xyzzy')
+);
+$x->toString();
+```
+
+```xml
+<xyzzy>
+  <foo>
+    <bar>qux</bar>
+    <bar>baz</bar>
+  </foo>
+  <qux>fred</qux>
+  <qux>quxxx</qux>
+  <bar>foo</bar>
+  <querty>true</querty>
+  <asdf>zxcv</asdf>
+</xyzzy>
 ```
