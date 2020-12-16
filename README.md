@@ -1,4 +1,4 @@
-# XArray
+# ❎ Array
 
 A utility for traversing PHP arrays with an XPath-like syntax.
 
@@ -154,17 +154,14 @@ $x = new XArray([
 ]);
 $schemaBuilder = SchemaBuilder::newFromXArray($x);
 
-// either way, the SchemaLockedArray will only ever have the key paths that are defined in the schema
+// either way, the SchemaLockedArray will only ever contain the key paths that are defined in the schema
 $x = new SchemaLockedArray($schemaBuilder);
-
-// ...leading to a very predictable array tree structure when outputted
-$array = $x->toArray();
 ```
 
 ## Serialization
 
 ```php
-// An XArray (or any derived instance) can have a specialized serializer attached when writing the array into a textual representation is necessary, such as JSON...
+// An XArray (or any derived instance) can have a specialized serializer attached, such as JSON...
 $x = (new XArray([
     'foo' => [
         'bar' => [
@@ -178,7 +175,10 @@ $x = (new XArray([
         ->withUnescapedSlashes()
         ->withPrettyPrint()
 );
-$x->toString();
+
+// the serializer is engaged when writing the array into a textual representation
+echo $x->toString();
+echo strval($x);
 ```
 
 ```json
@@ -194,7 +194,7 @@ $x->toString();
 ```
 
 ```php
-// ...or XML
+// XML has the option to wrap the output in a root element to ensure valid XML schema
 $x = (new XArray([
     'foo' => [
         'bar' => [
@@ -213,7 +213,7 @@ $x = (new XArray([
     (new XmlSerializer())
         ->withRootElement('xyzzy')
 );
-$x->toString();
+echo $x->toString();
 ```
 
 ```xml
