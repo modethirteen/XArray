@@ -160,6 +160,8 @@ $x = new SchemaLockedArray($schemaBuilder);
 
 ## Serialization
 
+### JSON
+
 ```php
 // An XArray (or any derived instance) can have a specialized serializer attached, such as JSON...
 $x = (new XArray([
@@ -192,6 +194,8 @@ echo strval($x);
     "plugh": "xyzzy"
 }
 ```
+
+### XML
 
 ```php
 // XML has the option to wrap the output in a root element to ensure valid XML schema
