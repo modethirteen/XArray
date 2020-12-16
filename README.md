@@ -173,7 +173,7 @@ $x = (new XArray([
         ]
     ],
     'plugh' => 'xyzzy'
-]))->with(
+]))->withSerializer(
     (new JsonSerializer())
         ->withUnescapedSlashes()
         ->withPrettyPrint()
@@ -209,7 +209,7 @@ $x = (new XArray([
     'bar' => 'foo',
     'querty' => true,
     'asdf' => 'zxcv'
-]))->with(
+]))->withSerializer(
     (new XmlSerializer())
         ->withRootElement('xyzzy')
 );
