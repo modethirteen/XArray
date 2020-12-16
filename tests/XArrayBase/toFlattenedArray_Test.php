@@ -26,7 +26,7 @@ abstract class toFlattenedArray_Test extends XArrayUnitTestCaseBase  {
     public function Can_return_new_array_created_from_empty_ctor() : void {
     
         // arrange
-        $x = $this->newXArray([], (new SchemaBuilder())->with('foo/bar'));
+        $x = self::newArray([], (new SchemaBuilder())->with('foo/bar'));
         $x->setVal('foo/bar', 'baz');
         
         // act
@@ -43,7 +43,7 @@ abstract class toFlattenedArray_Test extends XArrayUnitTestCaseBase  {
     
         // arrange
         $array = ['foo' => ['bar' => 'baz']];
-        $x = $this->newXArray($array);
+        $x = self::newArray($array);
         
         // act
         $result = $x->toFlattenedArray();
@@ -62,7 +62,7 @@ abstract class toFlattenedArray_Test extends XArrayUnitTestCaseBase  {
             'foo' => ['bar' => 'baz'],
             541 => ['attr' => '#text']
         ];
-        $x = $this->newXArray($array, (new SchemaBuilder())
+        $x = self::newArray($array, (new SchemaBuilder())
             ->with('foo/bar')
             ->with('qux/fred')
             ->with('a/b/c/d/e')

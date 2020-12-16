@@ -14,25 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace modethirteen\XArray\Tests\XArrayBase;
+namespace modethirteen\XArray\Tests;
 
+use modethirteen\XArray\Exception\SchemaLockedArrayUndefinedKeyException;
 use modethirteen\XArray\IArray;
 use modethirteen\XArray\SchemaBuilder;
-use modethirteen\XArray\Tests\UnitTestCaseBase;
+use PHPUnit\Framework\TestCase;
 
-abstract class XArrayUnitTestCaseBase extends UnitTestCaseBase  {
-
-    /**
-     * @var string
-     */
-    protected static string $class;
+abstract class UnitTestCaseBase extends TestCase  {
 
     /**
-     * @param array $array
+     * @param string $class - XArray concrete class (XArray, MutableXArray, ...)
+     * @param array $array - source array data
      * @param SchemaBuilder|null $schemaBuilder - default schema builder will be inferred from source array
      * @return IArray
      */
-    final protected static function newArray(array $array, SchemaBuilder $schemaBuilder = null) : IArray {
-        return self::newArrayFromClass(static::$class, $array, $schemaBuilder);
+    final protected static function newArrayFromClass(string $class, array $array, SchemaBuilder $schemaBuilder = null) : IArray {
+        $factory = new DummyArrayFactory($class);
+        if($schemaBuilder !== null) {
+            $factory = $factory->withSchemaBuilder($schemaBuilder);
+        }
+        try {
+            return $factory->newArray($array);
+        } catch(SchemaLockedArrayUndefinedKeyException $e) {
+            static::fail($e->getMessage());
+        }
     }
 }

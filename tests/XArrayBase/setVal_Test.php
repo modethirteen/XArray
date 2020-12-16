@@ -235,7 +235,7 @@ abstract class setVal_Test extends XArrayUnitTestCaseBase {
     public function Can_set_value(array $source, string $key, $value, array $expected) : void {
 
         // arrange
-        $x = $this->newXArray($source);
+        $x = self::newArray($source);
 
         // act
         $x->setVal($key, $value);

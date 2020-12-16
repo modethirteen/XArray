@@ -128,7 +128,7 @@ abstract class getVal_Test extends XArrayUnitTestCaseBase  {
     public function Can_get_value(array $source, string $key, $expected) : void {
 
         // arrange
-        $x = $this->newXArray($source);
+        $x = self::newArray($source);
 
         // act
         $result = $x->getVal($key);
@@ -143,7 +143,7 @@ abstract class getVal_Test extends XArrayUnitTestCaseBase  {
     public function Can_get_default() : void {
 
         // arrange
-        $x = $this->newXArray(['foo' => 'bar']);
+        $x = self::newArray(['foo' => 'bar']);
 
         // act
         $result = $x->getVal('qux', true);
@@ -158,7 +158,7 @@ abstract class getVal_Test extends XArrayUnitTestCaseBase  {
     public function Empty_key_returns_null() : void {
 
         // arrange
-        $x = $this->newXArray(['foo' => 'bar']);
+        $x = self::newArray(['foo' => 'bar']);
 
         // act
         $result = $x->getVal('');

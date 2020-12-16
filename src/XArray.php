@@ -16,14 +16,16 @@
  */
 namespace modethirteen\XArray;
 
-use Closure;
+use modethirteen\TypeEx\StringEx;
+use modethirteen\XArray\Serialization\ISerializer;
+use modethirteen\XArray\Serialization\Serializer;
 
 /**
  * Class XArray - get/set accessors for arrays
  *
  * @package modethirteen\XArray
  */
-class XArray {
+class XArray implements IArray {
 
     /**
      * @param array $array
@@ -64,30 +66,24 @@ class XArray {
     }
 
     /**
-     * Get string representation of value
+     * Array merge that combines array leaf nodes without overwriting
      *
-     * @param mixed $value
-     * @return string
+     * @param array $first
+     * @param array $second
+     * @return array
      */
-    private static function getStringValue($value) : string {
-        if($value === null) {
-            return '';
+    private static function merge(array $first, array $second) : array {
+        $merged = $first;
+        foreach($second as $k => $v) {
+            if(is_array($v) && isset($merged[$k]) && is_array($merged[$k])) {
+                $merged[$k] = self::merge($merged[$k], $v);
+            } else if(is_int($k)) {
+                $merged[] = $v;
+            } else {
+                $merged[$k] = $v;
+            }
         }
-        if(is_string($value)) {
-            return $value;
-        }
-        if(is_bool($value)) {
-            return $value ? 'true' : 'false';
-        }
-        if(is_array($value)) {
-            return implode(',', array_map(function($v) {
-                return self::getStringValue($v);
-            }, $value));
-        }
-        if($value instanceof Closure) {
-            return strval($value());
-        }
-        return strval($value);
+        return $merged;
     }
 
     /**
@@ -136,17 +132,22 @@ class XArray {
     private ?array $keys = null;
 
     /**
+     * @var ISerializer
+     */
+    private ISerializer $serializer;
+
+    /**
      * @param array|null $array $array - array values to create XArray from. If not supplied, XArray will start empty
      */
     public function __construct(array $array = null) {
         $this->array = $array !== null ? $array : [];
+        $this->serializer = new Serializer();
     }
 
-    /**
-     * Retrieve all possible key paths in the array
-     *
-     * @return string[]
-     */
+    public function __toString() : string {
+        return $this->toString();
+    }
+
     public function getKeys() : array {
         if($this->keys === null) {
             $this->keys = $this->getKeysHelper('', $this->array);
@@ -154,40 +155,15 @@ class XArray {
         return $this->keys;
     }
 
-    /**
-     * Find $key in the XArray, which is delimited by /
-     *
-     * If the found value is itself an array of multiple values, it will return the array
-     *
-     * @param string $key - the array path to return, i.e. /pages/content
-     * @param mixed $default - if the key is not found, this value will be returned
-     * @return mixed|null
-     * @noinspection PhpMissingReturnTypeInspection
-     */
+    /** @noinspection PhpMissingReturnTypeInspection */
     public function getVal(string $key, $default = null) {
         return self::getValHelper($this->array, $key, true, $default);
     }
 
-    /**
-     * Find $key in the XArray, which is delimited by /
-     *
-     * If the found value is itself an array of multiple values, it will return the value of array key 0
-     *
-     * @param string $key - the array path to return, i.e. /pages/content
-     * @param string $default - if the key is not found, this string value will be returned
-     * @return string - string representation of value
-     */
     public function getString(string $key, string $default = '') : string {
-        return self::getStringValue(self::getValHelper($this->array, $key, false, $default));
+        return StringEx::stringify(self::getValHelper($this->array, $key, false, $default));
     }
 
-    /**
-     * Set or replace a key value.
-     *
-     * @param string $key
-     * @param mixed $value
-     * @return void
-     */
     public function setVal(string $key, $value = null) : void {
         $this->setValHelper($this->array, $key, $value);
 
@@ -195,72 +171,10 @@ class XArray {
         $this->keys = null;
     }
 
-    /**
-     * Return the array as an XML string
-     *
-     * @param string|null $outer - optional output tag, used for recursion
-     * @return string - xml string representation of the array
-     */
-    public function toXml(string $outer = null) : string {
-        $result = '';
-        foreach($this->array as $key => $value) {
-            $key = self::getStringValue($key);
-
-            /** @noinspection PhpStatementHasEmptyBodyInspection */
-            if(strncmp($key, '@', 1) === 0) {
-
-                // skip attributes
-            } else {
-                $encodedTag = htmlspecialchars($outer ? $outer : $key, ENT_QUOTES);
-                if(is_array($value) && (count($value) > 0) && isset($value[0])) {
-
-                    // numeric array found => child nodes
-                    $x = new XArray($value);
-                    $result .= $x->toXml($key);
-                    unset($x);
-                } else {
-                    if(is_array($value)) {
-
-                        // attribute list found
-                        $attrs = '';
-                        foreach($value as $attrKey => $attrValue) {
-                            $attrKey = self::getStringValue($attrKey);
-                            if(strncmp($attrKey, '@', 1) === 0) {
-                                $attrValue = self::getStringValue($attrValue);
-                                $attrs .= ' ' . htmlspecialchars(substr($attrKey, 1), ENT_QUOTES) . '="' . htmlspecialchars($attrValue, ENT_QUOTES) . '"';
-                            }
-                        }
-                        $x = new XArray($value);
-                        $result .= '<' . $encodedTag . $attrs . '>' . $x->toXml() . '</' . $encodedTag . '>';
-                        unset($x);
-                    } else {
-                        $value = self::getStringValue($value);
-                        if($encodedTag !== '#text') {
-                            $result .= '<' . $encodedTag . '>' . htmlspecialchars($value, ENT_QUOTES) . '</' . $encodedTag . '>';
-                        } else {
-                            $result .= htmlspecialchars($value, ENT_QUOTES);
-                        }
-                    }
-                }
-            }
-        }
-        return $result;
-    }
-
-    /**
-     * Accessor for the array
-     *
-     * @return array
-     */
     public function toArray() : array {
         return $this->array;
     }
 
-    /**
-     * Returns a collection of mapped key paths to values
-     *
-     * @return array<string, mixed>
-     */
     public function toFlattenedArray() : array {
         $values = [];
         foreach($this->getKeys() as $key) {
@@ -273,6 +187,24 @@ class XArray {
             $values[$key] = $value;
         }
         return $values;
+    }
+
+    public function toMergedArray(IArray $array) : array {
+        return self::merge($this->toArray(), $array->toArray());
+    }
+
+    public function toString() : string {
+        return $this->serializer->serialize($this);
+    }
+
+    /**
+     * @param ISerializer $serializer
+     * @return static
+     */
+    public function withSerializer(ISerializer $serializer) : object {
+        $instance = clone $this;
+        $instance->serializer = $serializer;
+        return $instance;
     }
 
     /**

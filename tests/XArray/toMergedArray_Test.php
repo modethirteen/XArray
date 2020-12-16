@@ -14,14 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace modethirteen\XArray\Tests\JsonArray;
+namespace modethirteen\XArray\Tests\XArray;
 
-use modethirteen\XArray\JsonArray;
+use modethirteen\XArray\XArray;
 
-class getString_Test extends \modethirteen\XArray\Tests\XArrayBase\getString_Test  {
+class toMergedArray_Test extends \modethirteen\XArray\Tests\XArrayBase\toMergedArray_Test  {
 
     /**
      * @var string
      */
-    protected static string $class = JsonArray::class;
+    protected static string $class = XArray::class;
 }

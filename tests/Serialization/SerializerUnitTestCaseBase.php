@@ -14,14 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace modethirteen\XArray\Tests\JsonArray;
+namespace modethirteen\XArray\Tests\Serialization;
 
-use modethirteen\XArray\JsonArray;
+use modethirteen\XArray\MutableXArray;
+use modethirteen\XArray\SchemaLockedArray;
+use modethirteen\XArray\Tests\UnitTestCaseBase;
+use modethirteen\XArray\XArray;
 
-class getKeys_Test extends \modethirteen\XArray\Tests\XArrayBase\getKeys_Test  {
+abstract class SerializerUnitTestCaseBase extends UnitTestCaseBase  {
 
     /**
-     * @var string
+     * @return array
      */
-    protected static string $class = JsonArray::class;
+    public static function class_Provider() : array {
+        return [
+            [XArray::class],
+            [MutableXArray::class],
+            [SchemaLockedArray::class]
+        ];
+    }
 }

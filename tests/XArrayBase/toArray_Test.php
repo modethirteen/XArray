@@ -26,7 +26,7 @@ abstract class toArray_Test extends XArrayUnitTestCaseBase  {
     public function Can_return_new_array_created_from_empty_ctor() : void {
     
         // arrange
-        $x = $this->newXArray([], (new SchemaBuilder())->with('foo/bar'));
+        $x = self::newArray([], (new SchemaBuilder())->with('foo/bar'));
         $x->setVal('foo/bar', 'baz');
         
         // act
@@ -43,7 +43,7 @@ abstract class toArray_Test extends XArrayUnitTestCaseBase  {
     
         // arrange
         $array = ['foo' => ['bar' => 'baz']];
-        $x = $this->newXArray($array);
+        $x = self::newArray($array);
         
         // act
         $result = $x->toArray();
@@ -59,7 +59,7 @@ abstract class toArray_Test extends XArrayUnitTestCaseBase  {
         
         // arrange
         $array = ['foo' => ['bar' => 'baz']];
-        $x = $this->newXArray($array, (new SchemaBuilder())
+        $x = self::newArray($array, (new SchemaBuilder())
             ->with('foo/bar')
             ->with('qux/fred')
         );

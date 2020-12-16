@@ -14,14 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace modethirteen\XArray\Tests\JsonArray;
+namespace modethirteen\XArray\Serialization;
 
-use modethirteen\XArray\JsonArray;
+use modethirteen\XArray\IArray;
 
-class toFlattenedArray_Test extends \modethirteen\XArray\Tests\XArrayBase\toFlattenedArray_Test  {
+interface ISerializer {
 
     /**
-     * @var string
+     * Write the array data in text format
+     *
+     * @param IArray $array
+     * @return string
      */
-    protected static string $class = JsonArray::class;
+    function serialize(IArray $array) : string;
 }

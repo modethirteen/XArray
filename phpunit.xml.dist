@@ -8,5 +8,9 @@
         <include>
             <directory suffix=".php">src</directory>
         </include>
+        <exclude>
+            <file>src/IArray.php</file>
+            <file>src/Serialization/ISerializer.php</file>
+        </exclude>
     </coverage>
 </phpunit>

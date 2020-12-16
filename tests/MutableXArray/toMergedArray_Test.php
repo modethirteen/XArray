@@ -18,7 +18,7 @@ namespace modethirteen\XArray\Tests\MutableXArray;
 
 use modethirteen\XArray\MutableXArray;
 
-class toXml_Test extends \modethirteen\XArray\Tests\XArrayBase\toXml_Test  {
+class toMergedArray_Test extends \modethirteen\XArray\Tests\XArrayBase\toMergedArray_Test  {
 
     /**
      * @var string

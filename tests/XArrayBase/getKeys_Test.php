@@ -104,7 +104,7 @@ abstract class getKeys_Test extends XArrayUnitTestCaseBase {
     public function Can_get_keys(array $source, string $key, array $expected): void {
 
         // arrange
-        $x = $this->newXArray($source, SchemaBuilder::newFromXArray(new XArray($source))->with($key));
+        $x = self::newArray($source, SchemaBuilder::newFromXArray(new XArray($source))->with($key));
 
         // act
         $x->setVal($key, 'abcdf');

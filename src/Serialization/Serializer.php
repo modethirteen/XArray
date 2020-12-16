@@ -14,14 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace modethirteen\XArray\Tests\JsonArray;
+namespace modethirteen\XArray\Serialization;
 
-use modethirteen\XArray\JsonArray;
+use modethirteen\XArray\IArray;
 
-class toArray_Test extends \modethirteen\XArray\Tests\XArrayBase\toArray_Test  {
+class Serializer implements ISerializer {
 
-    /**
-     * @var string
-     */
-    protected static string $class = JsonArray::class;
+    public function serialize(IArray $array) : string {
+        return serialize($array->toArray());
+    }
 }

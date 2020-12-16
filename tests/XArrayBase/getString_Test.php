@@ -164,7 +164,7 @@ abstract class getString_Test extends XArrayUnitTestCaseBase  {
     public function Can_get_string_value(array $source, string $key, string $expected) : void {
 
         // arrange
-        $x = $this->newXArray($source);
+        $x = self::newArray($source);
 
         // act
         $result = $x->getString($key);
@@ -179,7 +179,7 @@ abstract class getString_Test extends XArrayUnitTestCaseBase  {
     public function Can_get_default() : void {
 
         // arrange
-        $x = $this->newXArray(['foo' => 'bar']);
+        $x = self::newArray(['foo' => 'bar']);
 
         // act
         $result = $x->getString('qux', 'fred');
@@ -194,7 +194,7 @@ abstract class getString_Test extends XArrayUnitTestCaseBase  {
     public function Empty_key_returns_empty_string() : void {
 
         // arrange
-        $x = $this->newXArray(['foo' => 'bar']);
+        $x = self::newArray(['foo' => 'bar']);
 
         // act
         $result = $x->getString('');

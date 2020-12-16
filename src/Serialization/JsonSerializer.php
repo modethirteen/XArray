@@ -14,9 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace modethirteen\XArray;
+namespace modethirteen\XArray\Serialization;
 
-class JsonArray extends XArray {
+use modethirteen\XArray\IArray;
+
+class JsonSerializer implements ISerializer {
 
     /**
      * @var bool
@@ -28,18 +30,7 @@ class JsonArray extends XArray {
      */
     private bool $isUnescapedSlashesEnabled = false;
 
-    /**
-     * @param string $json
-     * @return JsonArray
-     */
-    public static function newJsonArrayFromJson(string $json) : JsonArray {
-        return new JsonArray(json_decode($json, true));
-    }
-
-    /**
-     * @return string
-     */
-    public function toJson() : string {
+    public function serialize(IArray $array) : string {
         $options = 0;
         if($this->isPrettyPrintEnabled) {
             $options = $options | JSON_PRETTY_PRINT;
@@ -47,17 +38,16 @@ class JsonArray extends XArray {
         if($this->isUnescapedSlashesEnabled) {
             $options = $options | JSON_UNESCAPED_SLASHES;
         }
-        $result = $options > 0 ? json_encode($this->array, $options) : json_encode($this->array);
+        $result = $options > 0 ? json_encode($array->toArray(), $options) : json_encode($array->toArray());
         return is_string($result) ? $result : '{}';
     }
 
     /**
      * Remove forward slash escaping with serializing to JSON text
      *
-     * @note slashes should always remain escaped if JSON is embedded in, or contains, HTML
-     * @return JsonArray
+     * @return static
      */
-    public function withUnescapedSlashes() : JsonArray {
+    public function withUnescapedSlashes() : object {
 
         // even though this is a clone, we should not create a new array reference - there is no change to the underlying array data
         $instance = clone $this;
@@ -68,10 +58,9 @@ class JsonArray extends XArray {
     /**
      * Add line spacing and indentation when serializing to JSON text
      *
-     * @note Even though this is a clone, we should not create a new array reference - there is no change to the underlying array data
-     * @return JsonArray
+     * @return static
      */
-    public function withPrettyPrint() : JsonArray {
+    public function withPrettyPrint() : object {
 
         // even though this is a clone, we should not create a new array reference - there is no change to the underlying array data
         $instance = clone $this;

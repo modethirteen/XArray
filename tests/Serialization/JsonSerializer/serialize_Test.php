@@ -14,18 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace modethirteen\XArray\Tests\JsonArray;
+namespace modethirteen\XArray\Tests\Serialization\JsonSerializer;
 
-use modethirteen\XArray\JsonArray;
-use PHPUnit\Framework\TestCase;
+use modethirteen\XArray\Serialization\JsonSerializer;
+use modethirteen\XArray\Tests\Serialization\SerializerUnitTestCaseBase;
 
-class toJson_Test extends TestCase  {
+class serialize_Test extends SerializerUnitTestCaseBase  {
 
     /**
      * @return array
      */
-    public static function withPrettyPrint_withUnescapedSlashes_expected_Provider() : array {
-        return [
+    public static function class_withPrettyPrint_withUnescapedSlashes_expected_Provider() : array {
+        $data = [];
+        foreach([
             'without pretty print and without unescaped slashes' => [false, false, '{"foo":{"bar":["\/\/baz","qux"]},"plugh":"xyzzy"}'],
             'with pretty print and without unescaped slashes' => [true, false, <<<JSON
 {
@@ -38,7 +39,7 @@ class toJson_Test extends TestCase  {
     "plugh": "xyzzy"
 }
 JSON
-],
+            ],
             'without pretty print and with unescaped slashes' => [false, true, '{"foo":{"bar":["//baz","qux"]},"plugh":"xyzzy"}'],
             'with pretty print and with unescaped slashes' => [true, true, <<<JSON
 {
@@ -51,21 +52,27 @@ JSON
     "plugh": "xyzzy"
 }
 JSON
-]
-        ];
+            ]
+        ] as $arguments) {
+            foreach(self::class_Provider() as $classArguments) {
+                $data[] = array_merge($classArguments, $arguments);
+            }
+        }
+        return $data;
     }
 
     /**
-     * @dataProvider withPrettyPrint_withUnescapedSlashes_expected_Provider
+     * @dataProvider class_withPrettyPrint_withUnescapedSlashes_expected_Provider
+     * @param string $class
      * @param bool $withPrettyPrint
      * @param bool $withUnescapedSlashes
      * @param string $expected
      * @test
      */
-    public function Can_output_JSON(bool $withPrettyPrint, bool $withUnescapedSlashes, string $expected) : void {
+    public function Can_output_serialized_array(string $class, bool $withPrettyPrint, bool $withUnescapedSlashes, string $expected) : void {
 
         // arrange
-        $x = new JsonArray([
+        $x = self::newArrayFromClass($class, [
             'foo' => [
                 'bar' => [
                     "//baz",
@@ -74,17 +81,22 @@ JSON
             ],
             'plugh' => 'xyzzy'
         ]);
+        $serializer = new JsonSerializer();
         if($withPrettyPrint) {
-            $x = $x->withPrettyPrint();
+            $serializer = $serializer->withPrettyPrint();
         }
         if($withUnescapedSlashes) {
-            $x = $x->withUnescapedSlashes();
+            $serializer = $serializer->withUnescapedSlashes();
         }
 
         // act
-        $result = $x->toJson();
+        $result1 = $serializer->serialize($x);
+        $x = $x->withSerializer($serializer);
+        $result2 = $x->toString();
 
         // assert
-        static::assertEquals($expected, $result);
+        static::assertEquals($expected, $result1);
+        static::assertEquals($expected, $result2);
+        static::assertEquals($result1, $result2);
     }
 }
