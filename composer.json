@@ -14,7 +14,7 @@
     "issues": "https://github.com/modethirteen/XArray.php/issues"
   },
   "require": {
-    "php": "~7.2.0",
+    "php": "^7.2.0",
     "ext-json": "*"
   },
   "require-dev": {
