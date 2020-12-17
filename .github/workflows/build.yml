@@ -2,19 +2,24 @@ name: build
 
 on:
   push:
-    branches: [ php72 ]
+    branches: [ 1.x ]
   pull_request:
-    branches: [ php72 ]
+    branches: [ 1.x ]
 
 jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [7.2, 7.3, 7.4]
+        php-versions: [7.2, 7.3, 7.4]
 
     steps:
       - uses: actions/checkout@v2
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          ini-values: error_reporting=E_COMPILE_ERROR|E_RECOVERABLE_ERROR|E_ERROR|E_CORE_ERROR|E_PARSE
 
       - name: Validate dependencies
         run: composer validate
@@ -38,6 +43,6 @@ jobs:
         run: vendor/bin/phpstan analyse
 
       - name: Run test suite
-        run: vendor/bin/phpunit --configuration phpunit.xml.dist --coverage-clover=coverage.xml
+        run: phpdbg -qrr vendor/bin/phpunit --configuration phpunit.xml.dist --coverage-clover=coverage.xml
 
       - uses: codecov/codecov-action@v1
