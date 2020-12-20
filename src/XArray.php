@@ -16,7 +16,7 @@
  */
 namespace modethirteen\XArray;
 
-use Closure;
+use modethirteen\TypeEx\StringEx;
 
 /**
  * Class XArray - get/set accessors for arrays
@@ -61,33 +61,6 @@ class XArray {
             }
         }
         return $array;
-    }
-
-    /**
-     * Get string representation of value
-     *
-     * @param mixed $value
-     * @return string
-     */
-    private static function getStringValue($value) : string {
-        if($value === null) {
-            return '';
-        }
-        if(is_string($value)) {
-            return $value;
-        }
-        if(is_bool($value)) {
-            return $value ? 'true' : 'false';
-        }
-        if(is_array($value)) {
-            return implode(',', array_map(function($v) {
-                return self::getStringValue($v);
-            }, $value));
-        }
-        if($value instanceof Closure) {
-            return strval($value());
-        }
-        return strval($value);
     }
 
     /**
@@ -217,7 +190,7 @@ class XArray {
      * @return string - string representation of value
      */
     public function getString(string $key, string $default = '') : string {
-        return self::getStringValue($this->getVal($key, $default));
+        return StringEx::stringify($this->getVal($key, $default));
     }
 
     /**
@@ -243,7 +216,9 @@ class XArray {
     public function toXml(string $outer = null) : string {
         $result = '';
         foreach($this->array as $key => $value) {
-            $key = self::getStringValue($key);
+            $key = StringEx::stringify($key);
+
+            /** @noinspection PhpStatementHasEmptyBodyInspection */
             if(strncmp($key, '@', 1) === 0) {
 
                 // skip attributes
@@ -261,9 +236,9 @@ class XArray {
                         // attribute list found
                         $attrs = '';
                         foreach($value as $attrKey => $attrValue) {
-                            $attrKey = self::getStringValue($attrKey);
+                            $attrKey = StringEx::stringify($attrKey);
                             if(strncmp($attrKey, '@', 1) === 0) {
-                                $attrValue = self::getStringValue($attrValue);
+                                $attrValue = StringEx::stringify($attrValue);
                                 $attrs .= ' ' . htmlspecialchars(substr($attrKey, 1), ENT_QUOTES) . '="' . htmlspecialchars($attrValue, ENT_QUOTES) . '"';
                             }
                         }
@@ -271,7 +246,7 @@ class XArray {
                         $result .= '<' . $encodedTag . $attrs . '>' . $x->toXml() . '</' . $encodedTag . '>';
                         unset($x);
                     } else {
-                        $value = self::getStringValue($value);
+                        $value = StringEx::stringify($value);
                         if($encodedTag !== '#text') {
                             $result .= '<' . $encodedTag . '>' . htmlspecialchars($value, ENT_QUOTES) . '</' . $encodedTag . '>';
                         } else {
