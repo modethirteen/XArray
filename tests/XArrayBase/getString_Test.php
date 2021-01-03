@@ -78,37 +78,37 @@ abstract class getString_Test extends XArrayUnitTestCaseBase  {
             'array of arrays level one' => [
                 ['plugh' => [['foo', 'bar'], ['baz'], ['qux']]],
                 'plugh',
-                'foo,bar'
+                '["foo","bar"]'
             ],
             'array of arrays level two' => [
                 ['plugh' => ['xyzzy' => [['foo', 'bar'], ['baz'], ['qux']]]],
                 'plugh/xyzzy',
-                'foo,bar'
+                '["foo","bar"]'
             ],
             'array of arrays level three' => [
                 ['plugh' => ['xyzzy' => ['ogre' => [['foo', 'bar'], ['baz'], ['qux']]]]],
                 'plugh/xyzzy/ogre',
-                'foo,bar'
+                '["foo","bar"]'
             ],
             'array of arrays level four' => [
                 ['plugh' => ['xyzzy' => ['ogre' => ['nivek' => [['foo', 'bar'], ['baz'], ['qux']]]]]],
                 'plugh/xyzzy/ogre/nivek',
-                'foo,bar'
+                '["foo","bar"]'
             ],
             'array of arrays level two with level one key' => [
                 ['plugh' => ['xyzzy' => [['foo', 'bar'], ['baz'], ['qux']]]],
                 'plugh',
-                'foo,bar,baz,qux'
+                '{"xyzzy":[["foo","bar"],["baz"],["qux"]]}'
             ],
             'array of arrays level three with level two key' => [
                 ['plugh' => ['xyzzy' => ['ogre' => [['foo', 'bar'], ['baz'], ['qux']]]]],
                 'plugh/xyzzy',
-                'foo,bar,baz,qux'
+                '{"ogre":[["foo","bar"],["baz"],["qux"]]}'
             ],
             'array of arrays level four with level three key' => [
                 ['plugh' => ['xyzzy' => ['ogre' => ['nivek' => [['foo', 'bar'], ['baz'], ['qux']]]]]],
                 'plugh/xyzzy/ogre',
-                'foo,bar,baz,qux'
+                '{"nivek":[["foo","bar"],["baz"],["qux"]]}'
             ],
             'object with __toString' => [
                 ['foo' => new class {
