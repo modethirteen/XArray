@@ -161,7 +161,10 @@ class XArray implements ArrayInterface {
     }
 
     public function getString(string $key, string $default = '') : string {
-        return StringEx::stringify(self::getValHelper($this->array, $key, false, $default));
+        return StringEx::stringify(self::getValHelper($this->array, $key, false, $default), function($value) {
+            $result = json_encode($value);
+            return $result !== false ? $result : '';
+        });
     }
 
     public function setVal(string $key, $value = null) : void {
