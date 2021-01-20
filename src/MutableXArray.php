@@ -16,11 +16,6 @@
  */
 namespace modethirteen\XArray;
 
-/**
- * Class MutableXArray - get/set accessors for arrays
- * 
- * @package modethirteen\XArray
- */
 class MutableXArray extends XArray{
 
     /**

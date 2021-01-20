@@ -17,7 +17,7 @@
 namespace modethirteen\XArray\Tests;
 
 use modethirteen\XArray\Exception\SchemaLockedArrayUndefinedKeyException;
-use modethirteen\XArray\IArray;
+use modethirteen\XArray\ArrayInterface;
 use modethirteen\XArray\SchemaBuilder;
 use modethirteen\XArray\SchemaLockedArray;
 use modethirteen\XArray\XArray;
@@ -43,10 +43,10 @@ class DummyArrayFactory {
 
     /**
      * @param array $array
-     * @return IArray
+     * @return ArrayInterface
      * @throws SchemaLockedArrayUndefinedKeyException
      */
-    public function newArray(array $array) : IArray {
+    public function newArray(array $array) : ArrayInterface {
         $class = $this->class;
         if($this->class !== SchemaLockedArray::class) {
             return new $class($array);

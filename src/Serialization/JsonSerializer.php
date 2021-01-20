@@ -16,9 +16,9 @@
  */
 namespace modethirteen\XArray\Serialization;
 
-use modethirteen\XArray\IArray;
+use modethirteen\XArray\ArrayInterface;
 
-class JsonSerializer implements ISerializer {
+class JsonSerializer implements SerializerInterface {
 
     /**
      * @var bool
@@ -30,7 +30,7 @@ class JsonSerializer implements ISerializer {
      */
     private bool $isUnescapedSlashesEnabled = false;
 
-    public function serialize(IArray $array) : string {
+    public function serialize(ArrayInterface $array) : string {
         $options = 0;
         if($this->isPrettyPrintEnabled) {
             $options = $options | JSON_PRETTY_PRINT;

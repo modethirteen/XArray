@@ -16,14 +16,9 @@
  */
 namespace modethirteen\XArray;
 
-use modethirteen\XArray\Serialization\ISerializer;
+use modethirteen\XArray\Serialization\SerializerInterface;
 
-/**
- * Interface IArray
- *
- * @package modethirteen\XArray
- */
-interface IArray {
+interface ArrayInterface {
 
     /**
      * Retrieve all possible key paths in the array
@@ -80,10 +75,10 @@ interface IArray {
     /**
      * Return a collection with the values of another array merged with this one
      *
-     * @param IArray $array
+     * @param ArrayInterface $array
      * @return array
      */
-    function toMergedArray(IArray $array) : array;
+    function toMergedArray(ArrayInterface $array) : array;
 
     /**
      * @return string
@@ -91,8 +86,8 @@ interface IArray {
     function toString() : string;
 
     /**
-     * @param ISerializer $serializer
+     * @param SerializerInterface $serializer
      * @return static
      */
-    function withSerializer(ISerializer $serializer) : object;
+    function withSerializer(SerializerInterface $serializer) : object;
 }

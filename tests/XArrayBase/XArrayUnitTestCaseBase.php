@@ -16,7 +16,7 @@
  */
 namespace modethirteen\XArray\Tests\XArrayBase;
 
-use modethirteen\XArray\IArray;
+use modethirteen\XArray\ArrayInterface;
 use modethirteen\XArray\SchemaBuilder;
 use modethirteen\XArray\Tests\UnitTestCaseBase;
 
@@ -30,9 +30,9 @@ abstract class XArrayUnitTestCaseBase extends UnitTestCaseBase  {
     /**
      * @param array $array
      * @param SchemaBuilder|null $schemaBuilder - default schema builder will be inferred from source array
-     * @return IArray
+     * @return ArrayInterface
      */
-    final protected static function newArray(array $array, SchemaBuilder $schemaBuilder = null) : IArray {
+    final protected static function newArray(array $array, SchemaBuilder $schemaBuilder = null) : ArrayInterface {
         return self::newArrayFromClass(static::$class, $array, $schemaBuilder);
     }
 }

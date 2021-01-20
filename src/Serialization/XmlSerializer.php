@@ -17,17 +17,17 @@
 namespace modethirteen\XArray\Serialization;
 
 use modethirteen\TypeEx\StringEx;
-use modethirteen\XArray\IArray;
+use modethirteen\XArray\ArrayInterface;
 use modethirteen\XArray\XArray;
 
-class XmlSerializer implements ISerializer {
+class XmlSerializer implements SerializerInterface {
 
     /**
      * @var string|null
      */
     private ?string $root = null;
 
-    public function serialize(IArray $array): string {
+    public function serialize(ArrayInterface $array): string {
         $rootElements = array_filter($array->getKeys(), function(string $key) : bool {
             return !(new StringEx($key))->contains('/');
         });
@@ -55,11 +55,11 @@ class XmlSerializer implements ISerializer {
     /**
      * Return the array as an XML string
      *
-     * @param IArray $array
+     * @param ArrayInterface $array
      * @param string|null $outer - optional output tag, used for recursion
      * @return string - xml string representation of the array
      */
-    private function toXml(IArray $array, string $outer = null) : string {
+    private function toXml(ArrayInterface $array, string $outer = null) : string {
         $result = '';
         foreach($array->toArray() as $key => $value) {
             $key = StringEx::stringify($key);

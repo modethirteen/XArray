@@ -17,7 +17,7 @@
 namespace modethirteen\XArray\Tests;
 
 use modethirteen\XArray\Exception\SchemaLockedArrayUndefinedKeyException;
-use modethirteen\XArray\IArray;
+use modethirteen\XArray\ArrayInterface;
 use modethirteen\XArray\SchemaBuilder;
 use PHPUnit\Framework\TestCase;
 
@@ -27,9 +27,9 @@ abstract class UnitTestCaseBase extends TestCase  {
      * @param string $class - XArray concrete class (XArray, MutableXArray, ...)
      * @param array $array - source array data
      * @param SchemaBuilder|null $schemaBuilder - default schema builder will be inferred from source array
-     * @return IArray
+     * @return ArrayInterface
      */
-    final protected static function newArrayFromClass(string $class, array $array, SchemaBuilder $schemaBuilder = null) : IArray {
+    final protected static function newArrayFromClass(string $class, array $array, SchemaBuilder $schemaBuilder = null) : ArrayInterface {
         $factory = new DummyArrayFactory($class);
         if($schemaBuilder !== null) {
             $factory = $factory->withSchemaBuilder($schemaBuilder);

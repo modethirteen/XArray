@@ -17,7 +17,7 @@
 namespace modethirteen\XArray;
 
 use modethirteen\TypeEx\StringEx;
-use modethirteen\XArray\Serialization\ISerializer;
+use modethirteen\XArray\Serialization\SerializerInterface;
 use modethirteen\XArray\Serialization\Serializer;
 
 /**
@@ -25,7 +25,7 @@ use modethirteen\XArray\Serialization\Serializer;
  *
  * @package modethirteen\XArray
  */
-class XArray implements IArray {
+class XArray implements ArrayInterface {
 
     /**
      * @param array $array
@@ -132,9 +132,9 @@ class XArray implements IArray {
     private ?array $keys = null;
 
     /**
-     * @var ISerializer
+     * @var SerializerInterface
      */
-    private ISerializer $serializer;
+    private SerializerInterface $serializer;
 
     /**
      * @param array|null $array $array - array values to create XArray from. If not supplied, XArray will start empty
@@ -189,7 +189,7 @@ class XArray implements IArray {
         return $values;
     }
 
-    public function toMergedArray(IArray $array) : array {
+    public function toMergedArray(ArrayInterface $array) : array {
         return self::merge($this->toArray(), $array->toArray());
     }
 
@@ -198,10 +198,10 @@ class XArray implements IArray {
     }
 
     /**
-     * @param ISerializer $serializer
+     * @param SerializerInterface $serializer
      * @return static
      */
-    public function withSerializer(ISerializer $serializer) : object {
+    public function withSerializer(SerializerInterface $serializer) : object {
         $instance = clone $this;
         $instance->serializer = $serializer;
         return $instance;

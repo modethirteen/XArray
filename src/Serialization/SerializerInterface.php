@@ -16,15 +16,15 @@
  */
 namespace modethirteen\XArray\Serialization;
 
-use modethirteen\XArray\IArray;
+use modethirteen\XArray\ArrayInterface;
 
-interface ISerializer {
+interface SerializerInterface {
 
     /**
      * Write the array data in text format
      *
-     * @param IArray $array
+     * @param ArrayInterface $array
      * @return string
      */
-    function serialize(IArray $array) : string;
+    function serialize(ArrayInterface $array) : string;
 }

@@ -16,11 +16,11 @@
  */
 namespace modethirteen\XArray\Serialization;
 
-use modethirteen\XArray\IArray;
+use modethirteen\XArray\ArrayInterface;
 
-class Serializer implements ISerializer {
+class Serializer implements SerializerInterface {
 
-    public function serialize(IArray $array) : string {
+    public function serialize(ArrayInterface $array) : string {
         return serialize($array->toArray());
     }
 }
